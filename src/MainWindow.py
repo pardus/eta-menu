@@ -202,8 +202,8 @@ class MainWindow(object):
         subprocess.Popen(["cinnamon-session-quit", "--power-off"])
 
     def on_ui_about_button_clicked(self, button):
-        self.ui_about_dialog.run()
-        self.ui_about_dialog.hide()
+        self.ui_main_window.hide()
+        subprocess.Popen(["pardus-about"])
 
     def on_ui_main_window_delete_event(self, widget, event):
         self.ui_main_window.hide()
