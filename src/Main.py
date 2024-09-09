@@ -38,6 +38,7 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
+            self.window.control_display()
             self.window.ui_main_window.present()
 
     def do_command_line(self, command_line):

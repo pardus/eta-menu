@@ -41,6 +41,7 @@ class MainWindow(object):
 
         self.set_desktop_apps()
         self.control_display()
+        self.focus_search()
 
         self.ui_main_window.set_application(application)
 
@@ -113,6 +114,9 @@ class MainWindow(object):
 
         except Exception as e:
             print("control_display: {}".format(e))
+
+    def focus_search(self):
+        self.ui_apps_searchentry.grab_focus()
 
     def get_desktop_apps(self):
         apps = []
