@@ -80,6 +80,7 @@ class MainWindow(object):
 
     def define_components(self):
         self.ui_main_window = self.GtkBuilder.get_object("ui_main_window")
+        self.ui_main_window.set_skip_taskbar_hint(True)
         self.ui_about_dialog = self.GtkBuilder.get_object("ui_about_dialog")
         self.ui_apps_iconview = self.GtkBuilder.get_object("ui_apps_iconview")
         self.ui_apps_iconview.set_pixbuf_column(0)
