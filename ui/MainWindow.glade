@@ -111,19 +111,24 @@
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow" id="ui_apps_scrolledwindow">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">always</property>
                 <property name="min-content-width">500</property>
                 <property name="min-content-height">500</property>
+                <property name="overlay-scrolling">False</property>
                 <child>
                   <object class="GtkIconView" id="ui_apps_iconview">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="margin">6</property>
+                    <property name="margin">5</property>
                     <property name="model">ui_myapps_treemodelfilter</property>
                     <property name="item-width">100</property>
+                    <property name="row-spacing">5</property>
+                    <property name="column-spacing">5</property>
+                    <property name="item-padding">5</property>
                     <signal name="selection-changed" handler="on_ui_apps_iconview_selection_changed" swapped="no"/>
                   </object>
                 </child>

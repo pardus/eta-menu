@@ -88,6 +88,7 @@ class MainWindow(object):
         self.ui_myapps_treemodelfilter = self.GtkBuilder.get_object("ui_myapps_treemodelfilter")
         self.ui_myapps_treemodelfilter.set_visible_func(self.apps_filter_function)
         self.ui_apps_searchentry = self.GtkBuilder.get_object("ui_apps_searchentry")
+        self.ui_apps_scrolledwindow = self.GtkBuilder.get_object("ui_apps_scrolledwindow")
 
     def define_variables(self):
         pass
@@ -114,6 +115,10 @@ class MainWindow(object):
 
         except Exception as e:
             print("control_display: {}".format(e))
+
+    def reset_scroll(self):
+        v_adj = self.ui_apps_scrolledwindow.get_vadjustment()
+        v_adj.set_value(v_adj.get_lower())
 
     def focus_search(self):
         self.ui_apps_searchentry.grab_focus()

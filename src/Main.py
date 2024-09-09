@@ -38,6 +38,8 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
+            self.window.reset_scroll()
+            self.window.ui_apps_searchentry.set_text("")
             self.window.control_display()
             self.window.ui_main_window.present()
             self.window.focus_search()
