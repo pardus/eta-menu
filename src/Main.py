@@ -39,6 +39,7 @@ class Application(Gtk.Application):
             self.window = MainWindow(self)
         else:
             self.window.control_display()
+            self.window.focus_search()
             self.window.ui_main_window.present()
 
     def do_command_line(self, command_line):
