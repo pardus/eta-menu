@@ -38,7 +38,7 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
-            self.window.main_window.present()
+            self.window.ui_main_window.present()
 
     def do_command_line(self, command_line):
         options = command_line.get_options_dict()
