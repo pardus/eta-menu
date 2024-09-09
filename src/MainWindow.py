@@ -9,6 +9,7 @@ Created on Thu Jul 25 14:53:13 2024
 import os
 import signal
 import subprocess
+import webbrowser
 import gi
 
 gi.require_version("GLib", "2.0")
@@ -200,6 +201,22 @@ class MainWindow(object):
     def on_ui_poweroff_button_clicked(self, button):
         self.ui_main_window.hide()
         subprocess.Popen(["cinnamon-session-quit", "--power-off"])
+
+    def on_ui_browser_button_clicked(self, button):
+        self.ui_main_window.hide()
+        webbrowser.open_new("")
+
+    def on_ui_cinnamonsettings_button_clicked(self, button):
+        self.ui_main_window.hide()
+        subprocess.Popen(["cinnamon-settings"])
+
+    def on_ui_terminal_button_clicked(self, button):
+        self.ui_main_window.hide()
+        subprocess.Popen(["x-terminal-emulator"])
+
+    def on_ui_filemanager_button_clicked(self, button):
+        self.ui_main_window.hide()
+        subprocess.Popen(["xdg-open", GLib.get_home_dir()])
 
     def on_ui_about_button_clicked(self, button):
         self.ui_main_window.hide()
