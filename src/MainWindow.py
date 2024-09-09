@@ -43,6 +43,7 @@ class MainWindow(object):
         self.set_desktop_apps()
         self.control_display()
         self.focus_search()
+        self.set_username()
 
         self.ui_main_window.set_application(application)
 
@@ -91,6 +92,7 @@ class MainWindow(object):
         self.ui_myapps_treemodelfilter.set_visible_func(self.apps_filter_function)
         self.ui_apps_searchentry = self.GtkBuilder.get_object("ui_apps_searchentry")
         self.ui_apps_scrolledwindow = self.GtkBuilder.get_object("ui_apps_scrolledwindow")
+        self.ui_username_label = self.GtkBuilder.get_object("ui_username_label")
 
     def define_variables(self):
         pass
@@ -117,6 +119,16 @@ class MainWindow(object):
 
         except Exception as e:
             print("control_display: {}".format(e))
+
+    def set_username(self):
+        username = GLib.get_user_name()
+        user_real_name = GLib.get_real_name()
+
+        if user_real_name == "" or user_real_name == "Unknown":
+            user_real_name = username
+
+        self.ui_username_label.set_markup("<b>{}</b>".format(user_real_name))
+        self.ui_username_label.set_tooltip_text("{}".format(username))
 
     def reset_scroll(self):
         v_adj = self.ui_apps_scrolledwindow.get_vadjustment()
@@ -217,6 +229,10 @@ class MainWindow(object):
     def on_ui_filemanager_button_clicked(self, button):
         self.ui_main_window.hide()
         subprocess.Popen(["xdg-open", GLib.get_home_dir()])
+
+    def on_ui_username_button_clicked(self, button):
+        self.ui_main_window.hide()
+        subprocess.Popen(["cinnamon-settings", "user"])
 
     def on_ui_about_button_clicked(self, button):
         self.ui_main_window.hide()
