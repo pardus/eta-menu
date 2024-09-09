@@ -181,6 +181,7 @@ class MainWindow(object):
             treeiter = self.ui_myapps_treemodelfilter.get_iter(selected_items[0])
             app_id = self.ui_myapps_treemodelfilter.get(treeiter, 2)[0]
             print("Open: {}".format(app_id))
+            self.ui_main_window.hide()
             Gio.DesktopAppInfo.new(app_id).launch([], None)
 
     def on_ui_apps_searchentry_search_changed(self, search_entry):
@@ -188,12 +189,15 @@ class MainWindow(object):
         self.ui_myapps_treemodelfilter.refilter()
 
     def on_ui_lock_button_clicked(self, button):
+        self.ui_main_window.hide()
         subprocess.Popen(["cinnamon-screensaver-command", "--lock"])
 
     def on_ui_logout_button_clicked(self, button):
+        self.ui_main_window.hide()
         subprocess.Popen(["cinnamon-session-quit", "--logout"])
 
     def on_ui_poweroff_button_clicked(self, button):
+        self.ui_main_window.hide()
         subprocess.Popen(["cinnamon-session-quit", "--power-off"])
 
     def on_ui_about_button_clicked(self, button):
