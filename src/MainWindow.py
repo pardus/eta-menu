@@ -205,17 +205,23 @@ class MainWindow(object):
         GLib.idle_add(self.ui_apps_flowbox.show_all)
 
     def on_apps_listbox_released(self, widget, event, listbox):
-        if event.button == 1:
-            print(f"Sol tıklandı: {listbox.name}")
-            GLib.idle_add(self.ui_apps_flowbox.unselect_all)
-            self.ui_main_window.hide()
-            Gio.DesktopAppInfo.new(listbox.name["id"]).launch([], None)
-        elif event.button == 3:
-            print(f"Sağ tıklandı: {listbox.name}")
+        # if event.button == 1:
+        #     print(f"Sol tıklandı: {listbox.name}")
+        #     GLib.idle_add(self.ui_apps_flowbox.unselect_all)
+        #     self.ui_main_window.hide()
+        #     Gio.DesktopAppInfo.new(listbox.name["id"]).launch([], None)
+        if event.button == 3:
+            print(f"Right clicked: {listbox.name}")
             self.right_clicked_app = listbox.name
             self.ui_apps_flowbox.select_child(listbox.get_parent())
             self.ui_apps_popover.set_relative_to(listbox)
             self.ui_apps_popover.popup()
+
+    def on_ui_apps_flowbox_child_activated(self, flowbox, child):
+        print(f"Left clicked: {child.get_children()[0].name}")
+        GLib.idle_add(self.ui_apps_flowbox.unselect_all)
+        self.ui_main_window.hide()
+        Gio.DesktopAppInfo.new(child.get_children()[0].name["id"]).launch([], None)
 
     def set_autostart(self):
         self.UserSettings.set_autostart(self.UserSettings.config_autostart)
