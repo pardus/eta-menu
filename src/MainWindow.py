@@ -39,6 +39,8 @@ class MainWindow(object):
             print("Error reading GUI file: " + self.main_window_ui_filename)
             raise
 
+
+
         self.define_components()
         self.define_variables()
 
@@ -52,6 +54,8 @@ class MainWindow(object):
         self.user_settings()
 
         self.create_user_pinned_apps_from_file()
+
+        self.start_monitoring()
 
         self.ui_about_dialog.set_program_name(_("ETA Menu"))
         if self.ui_about_dialog.get_titlebar() is None:
@@ -102,7 +106,8 @@ class MainWindow(object):
         self.ui_apps_flowbox.set_filter_func(self.apps_filter_function)
 
     def define_variables(self):
-        pass
+        self.trigger_in_progress = False
+        self.monitoring_id = None
 
     def user_settings(self):
         self.UserSettings = UserSettings()
@@ -141,6 +146,46 @@ class MainWindow(object):
 
     def focus_search(self):
         self.ui_apps_searchentry.grab_focus()
+
+
+    def start_monitoring(self):
+        data_dirs = []
+
+        system_dirs = GLib.get_system_data_dirs()
+        user_dir = GLib.get_user_data_dir()
+
+        for sys_dir in system_dirs:
+            data_dirs.append(os.path.join(sys_dir, "applications"))
+        data_dirs.append((os.path.join(user_dir, "applications")))
+
+        data_dirs_with_subs = data_dirs
+
+        for data_dir in data_dirs:
+            sub_dirs = [x[0] for x in os.walk(data_dir)]
+            for sub in sub_dirs:
+                if sub not in data_dirs_with_subs:
+                    data_dirs_with_subs.append(sub)
+
+        self.gdir = {}
+        count = 1
+        for data_dir in data_dirs_with_subs:
+            self.gdir["monitor-{}".format(count)] = Gio.file_new_for_path(data_dir).monitor_directory(0, None)
+            self.gdir["monitor-{}".format(count)].connect('changed', self.on_app_info_changed)
+            count += 1
+
+        print("Monitoring: {}".format(data_dirs_with_subs))
+
+    def on_app_info_changed(self, file_monitor, file, other_file, event_type):
+        print("App Info Changed: {} {}".format(file.get_path(), event_type))
+
+        if event_type in [Gio.FileMonitorEvent.CHANGES_DONE_HINT, Gio.FileMonitorEvent.DELETED]:
+            if "{}".format(file.get_path()).endswith(".desktop"):
+                print("App Info Trigger: {} {}".format(file.get_path(), event_type))
+                if not self.trigger_in_progress:
+                    self.trigger_in_progress = True
+                    if self.monitoring_id is not None:
+                        GLib.source_remove(self.monitoring_id)
+                    self.monitoring_id = GLib.timeout_add_seconds(5, self.set_desktop_apps)
 
     def create_user_pinned_apps_from_file(self):
         user_pins = self.UserSettings.get_user_pins()
@@ -208,6 +253,7 @@ class MainWindow(object):
         return apps
 
     def set_desktop_apps(self):
+        print("in set_desktop_apps")
         desktop_apps = self.get_desktop_apps()
         for row in self.ui_apps_flowbox:
             GLib.idle_add(self.ui_apps_flowbox.remove, row)
@@ -242,11 +288,17 @@ class MainWindow(object):
             listbox.connect("button-release-event", self.on_apps_listbox_released, listbox)
             listbox.name = {"id": desktop_app["id"], "name": desktop_app["name"], "icon_name": desktop_app["icon_name"],
                             "icon": app_icon, "filename": desktop_app["filename"]}
-            listbox.add(box)
+
+            GLib.idle_add(listbox.add, box)
 
             GLib.idle_add(self.ui_apps_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
 
         GLib.idle_add(self.ui_apps_flowbox.show_all)
+
+        self.trigger_in_progress = False
+        if self.monitoring_id is not None:
+            GLib.source_remove(self.monitoring_id)
+            self.monitoring_id = None
 
     def on_apps_listbox_released(self, widget, event, listbox):
         # if event.button == 1:
