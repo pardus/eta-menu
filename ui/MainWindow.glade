@@ -42,7 +42,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Add Favorites</property>
+                    <property name="label" translatable="yes">Add to Favorites</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -487,7 +487,7 @@
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Remove From Favorites</property>
+                    <property name="label" translatable="yes">Remove from Favorites</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
