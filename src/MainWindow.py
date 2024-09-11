@@ -5,6 +5,7 @@ Created on Thu Jul 25 14:53:13 2024
 
 @author: fatihaltun
 """
+import json
 import os
 import signal
 import subprocess
@@ -17,6 +18,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import Gtk, GObject, Gio, GLib, GdkPixbuf, Gdk
 from UserSettings import UserSettings
+from Utils import Utils, ErrorDialog
 
 import locale
 from locale import gettext as _
@@ -195,7 +197,7 @@ class MainWindow(object):
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.connect("button-release-event", self.on_apps_listbox_released, listbox)
             listbox.name = {"id": desktop_app["id"], "name": desktop_app["name"], "icon_name": desktop_app["icon_name"],
-                            "icon": app_icon}
+                            "icon": app_icon, "filename": desktop_app["filename"]}
             listbox.add(box)
 
             GLib.idle_add(self.ui_apps_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
@@ -267,6 +269,53 @@ class MainWindow(object):
 
     def on_ui_remove_from_userpins_button_clicked(self, button):
         self.ui_userpins_flowbox.remove(self.ui_userpins_flowbox.get_selected_children()[0])
+
+    def on_ui_add_to_panel_button_clicked(self, button):
+
+        config_file = "{}/cinnamon/spices/grouped-window-list@cinnamon.org/2.json".format(GLib.get_user_config_dir())
+
+        if os.path.exists(config_file):
+            cf = open(config_file, "r")
+            panel = json.load(cf)
+
+            app_id = self.ui_apps_flowbox.get_selected_children()[0].get_children()[0].name["id"]
+
+            old_pinned_value = panel["pinned-apps"]["value"]
+            new_pinned_value = old_pinned_value + [app_id]
+            panel["pinned-apps"]["value"] = new_pinned_value
+
+            new_cf = open(config_file, "w")
+            new_cf.write(json.dumps(panel, indent=4))
+            new_cf.flush()
+
+            try:
+                subprocess.run("dbus-send --session --dest=org.Cinnamon.LookingGlass --type=method_call"
+                               " /org/Cinnamon/LookingGlass org.Cinnamon.LookingGlass.ReloadExtension"
+                               " string:'grouped-window-list@cinnamon.org' string:'APPLET'", shell=True)
+            except Exception as e:
+                print("{}".format(e))
+        else:
+            print("{} not exists.".format(config_file))
+            ErrorDialog(_("Error"), "{} not exists.".format(config_file))
+
+        self.ui_apps_popover.popdown()
+        self.ui_apps_flowbox.unselect_all()
+
+    def on_ui_add_to_desktop_button_clicked(self, button):
+        source = Gio.File.new_for_path(self.ui_apps_flowbox.get_selected_children()[0].get_children()[0].name["filename"])
+        dest = Gio.File.new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP) + "/" + source.get_basename())
+
+        source.copy(dest, Gio.FileCopyFlags.OVERWRITE , None, None, None)
+
+        file_info = Gio.FileInfo.new()
+        file_info.set_attribute_uint32("unix::mode", 0o755)
+        dest.set_attributes_from_info(file_info, Gio.FileQueryInfoFlags.NONE, None)
+
+        if os.path.isfile(source.get_path()) and os.path.isfile(dest.get_path()):
+            print("{} copied to {}".format(source.get_path(), dest.get_path()))
+
+        self.ui_apps_popover.popdown()
+        self.ui_apps_flowbox.unselect_all()
 
     def on_ui_apps_searchentry_search_changed(self, search_entry):
         self.ui_apps_flowbox.invalidate_filter()
