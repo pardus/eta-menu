@@ -44,6 +44,8 @@ class Application(Gtk.Application):
                 self.window.ui_main_window.set_visible(True)
                 self.window.reset_scroll()
                 self.window.ui_apps_searchentry.set_text("")
+                self.window.ui_apps_flowbox.unselect_all()
+                self.window.ui_userpins_flowbox.unselect_all()
                 self.window.control_display()
                 self.window.ui_main_window.present()
                 self.window.focus_search()

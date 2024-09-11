@@ -5,11 +5,11 @@ Created on Thu Jul 25 14:53:13 2024
 
 @author: fatihaltun
 """
-
 import os
 import signal
 import subprocess
 import webbrowser
+
 import gi
 
 gi.require_version("GLib", "2.0")
@@ -84,15 +84,18 @@ class MainWindow(object):
         self.ui_main_window = self.GtkBuilder.get_object("ui_main_window")
         self.ui_main_window.set_skip_taskbar_hint(True)
         self.ui_about_dialog = self.GtkBuilder.get_object("ui_about_dialog")
-        self.ui_apps_iconview = self.GtkBuilder.get_object("ui_apps_iconview")
-        self.ui_apps_iconview.set_pixbuf_column(0)
-        self.ui_apps_iconview.set_text_column(1)
-        self.ui_apps_liststore = self.GtkBuilder.get_object("ui_apps_liststore")
-        self.ui_myapps_treemodelfilter = self.GtkBuilder.get_object("ui_myapps_treemodelfilter")
-        self.ui_myapps_treemodelfilter.set_visible_func(self.apps_filter_function)
+
         self.ui_apps_searchentry = self.GtkBuilder.get_object("ui_apps_searchentry")
         self.ui_apps_scrolledwindow = self.GtkBuilder.get_object("ui_apps_scrolledwindow")
         self.ui_username_label = self.GtkBuilder.get_object("ui_username_label")
+
+        self.ui_apps_popover = self.GtkBuilder.get_object("ui_apps_popover")
+        self.ui_userpins_popover = self.GtkBuilder.get_object("ui_userpins_popover")
+
+        self.ui_apps_flowbox = self.GtkBuilder.get_object("ui_apps_flowbox")
+        self.ui_userpins_flowbox = self.GtkBuilder.get_object("ui_userpins_flowbox")
+
+        self.ui_apps_flowbox.set_filter_func(self.apps_filter_function)
 
     def define_variables(self):
         pass
@@ -141,66 +144,132 @@ class MainWindow(object):
         apps = []
         for app in Gio.DesktopAppInfo.get_all():
 
-            id = app.get_id()
-            name = app.get_name()
+            app_id = app.get_id()
+            app_name = app.get_name()
             executable = app.get_executable()
             nodisplay = app.get_nodisplay()
-            icon = app.get_string('Icon')
+            icon_name = app.get_string('Icon')
             description = app.get_description() or app.get_generic_name() or app.get_name()
             filename = app.get_filename()
             keywords = " ".join(app.get_keywords())
 
             if executable and not nodisplay:
-                apps.append({"id": id, "name": name, "icon": icon, "description": description, "filename": filename,
-                             "keywords": keywords, "executable": executable})
+                apps.append(
+                    {"id": app_id, "name": app_name, "icon_name": icon_name, "description": description, "filename": filename,
+                     "keywords": keywords, "executable": executable})
 
         apps = sorted(dict((v['name'], v) for v in apps).values(), key=lambda x: locale.strxfrm(x["name"]))
         return apps
 
     def set_desktop_apps(self):
         desktop_apps = self.get_desktop_apps()
-        GLib.idle_add(self.ui_apps_liststore.clear)
-
+        for row in self.ui_apps_flowbox:
+            GLib.idle_add(self.ui_apps_flowbox.remove, row)
 
         for desktop_app in desktop_apps:
 
+            app_name = desktop_app["name"]
+            icon = Gtk.Image.new()
             try:
-                app_icon = Gtk.IconTheme.get_default().load_icon(desktop_app["icon"], 64, Gtk.IconLookupFlags.FORCE_SIZE)
+                app_icon = Gtk.IconTheme.get_default().load_icon(desktop_app["icon_name"], 64,
+                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
             except:
                 try:
-                    app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon"], 64, 64)
+                    app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
                 except:
                     app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 64,
                                                                      Gtk.IconLookupFlags.FORCE_SIZE)
+            icon.set_from_pixbuf(app_icon)
 
-            app_name = desktop_app["name"]
+            label = Gtk.Label.new()
+            label.set_text(app_name)
+            label.set_line_wrap(True)
+            label.set_justify(Gtk.Justification.CENTER)
+            label.set_max_width_chars(10)
 
-            GLib.idle_add(self.add_desktop_app_to_ui, [app_icon, app_name, desktop_app["id"]])
+            box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 5)
+            box.pack_start(icon, False, True, 0)
+            box.pack_start(label, False, True, 0)
 
-    def add_desktop_app_to_ui(self, app_list):
-        self.ui_apps_liststore.append(app_list)
+            listbox = Gtk.ListBox.new()
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.connect("button-release-event", self.on_apps_listbox_released, listbox)
+            listbox.name = {"id": desktop_app["id"], "name": desktop_app["name"], "icon_name": desktop_app["icon_name"],
+                            "icon": app_icon}
+            listbox.add(box)
+
+            GLib.idle_add(self.ui_apps_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+
+        GLib.idle_add(self.ui_apps_flowbox.show_all)
+
+    def on_apps_listbox_released(self, widget, event, listbox):
+        if event.button == 1:
+            print(f"Sol tıklandı: {listbox.name}")
+            GLib.idle_add(self.ui_apps_flowbox.unselect_all)
+            self.ui_main_window.hide()
+            Gio.DesktopAppInfo.new(listbox.name["id"]).launch([], None)
+        elif event.button == 3:
+            print(f"Sağ tıklandı: {listbox.name}")
+            self.right_clicked_app = listbox.name
+            self.ui_apps_flowbox.select_child(listbox.get_parent())
+            self.ui_apps_popover.set_relative_to(listbox)
+            self.ui_apps_popover.popup()
 
     def set_autostart(self):
         self.UserSettings.set_autostart(self.UserSettings.config_autostart)
 
-    def apps_filter_function(self, model, iteration, data):
-        search_entry_text = self.ui_apps_searchentry.get_text()
-        app_name = model[iteration][1]
-        if search_entry_text.lower() in app_name.lower():
+    def apps_filter_function(self, row):
+        search = self.ui_apps_searchentry.get_text().lower()
+        app = row.get_children()[0].name
+        if search in app["name"].lower():
             return True
 
-    def on_ui_apps_iconview_selection_changed(self, iconview):
-        selected_items = iconview.get_selected_items()
-        if len(selected_items) == 1:
-            treeiter = self.ui_myapps_treemodelfilter.get_iter(selected_items[0])
-            app_id = self.ui_myapps_treemodelfilter.get(treeiter, 2)[0]
-            print("Open: {}".format(app_id))
+    def on_ui_add_to_userpins_button_clicked(self, button):
+        icon = Gtk.Image.new()
+        try:
+            app_icon = Gtk.IconTheme.get_default().load_icon(self.right_clicked_app["icon_name"], 32,
+                                                             Gtk.IconLookupFlags.FORCE_SIZE)
+        except:
+            try:
+                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(self.right_clicked_app["icon_name"], 32, 32)
+            except:
+                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
+                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
+        icon.set_from_pixbuf(app_icon)
+
+        box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+        box.pack_start(icon, False, True, 0)
+
+        listbox = Gtk.ListBox.new()
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
+        listbox.name = self.right_clicked_app
+        listbox.add(box)
+
+        GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+
+        GLib.idle_add(self.ui_userpins_flowbox.show_all)
+
+        self.ui_apps_popover.popdown()
+        self.ui_apps_flowbox.unselect_all()
+
+    def on_userpins_listbox_released(self, widget, event, listbox):
+        if event.button == 1:
+            print(f"Sol tıklandı: {listbox.name}")
+            GLib.idle_add(self.ui_userpins_flowbox.unselect_all)
             self.ui_main_window.hide()
-            Gio.DesktopAppInfo.new(app_id).launch([], None)
+            Gio.DesktopAppInfo.new(listbox.name["id"]).launch([], None)
+        elif event.button == 3:
+            print(f"Sağ tıklandı: {listbox.name}")
+            self.ui_userpins_flowbox.select_child(listbox.get_parent())
+            self.ui_userpins_popover.set_relative_to(listbox)
+            self.ui_userpins_popover.popup()
+
+    def on_ui_remove_from_userpins_button_clicked(self, button):
+        self.ui_userpins_flowbox.remove(self.ui_userpins_flowbox.get_selected_children()[0])
 
     def on_ui_apps_searchentry_search_changed(self, search_entry):
-        print(search_entry.get_text())
-        self.ui_myapps_treemodelfilter.refilter()
+        self.ui_apps_flowbox.invalidate_filter()
 
     def on_ui_lock_button_clicked(self, button):
         self.ui_main_window.hide()
