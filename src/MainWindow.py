@@ -51,6 +51,8 @@ class MainWindow(object):
 
         self.user_settings()
 
+        self.create_user_pinned_apps_from_file()
+
         self.ui_about_dialog.set_program_name(_("ETA Menu"))
         if self.ui_about_dialog.get_titlebar() is None:
             about_headerbar = Gtk.HeaderBar.new()
@@ -104,8 +106,6 @@ class MainWindow(object):
 
     def user_settings(self):
         self.UserSettings = UserSettings()
-        self.UserSettings.createDefaultConfig()
-        self.UserSettings.readConfig()
 
     def control_display(self):
         try:
@@ -141,6 +141,50 @@ class MainWindow(object):
 
     def focus_search(self):
         self.ui_apps_searchentry.grab_focus()
+
+    def create_user_pinned_apps_from_file(self):
+        user_pins = self.UserSettings.get_user_pins()
+        if not user_pins:
+            print("user pins empty")
+            return
+        for user_app_id in user_pins["apps"]:
+            try:
+                app = Gio.DesktopAppInfo.new(user_app_id)
+            except Exception as e:
+                print("{} {}".format(user_app_id, e))
+                continue
+            app_id = app.get_id()
+            app_name = app.get_name()
+            executable = app.get_executable()
+            nodisplay = app.get_nodisplay()
+            icon_name = app.get_string('Icon')
+            description = app.get_description() or app.get_generic_name() or app.get_name()
+            filename = app.get_filename()
+            keywords = " ".join(app.get_keywords())
+
+            icon = Gtk.Image.new()
+            try:
+                app_icon = Gtk.IconTheme.get_default().load_icon(icon_name, 32, Gtk.IconLookupFlags.FORCE_SIZE)
+            except:
+                try:
+                    app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_name, 32, 32)
+                except:
+                    app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
+                                                                     Gtk.IconLookupFlags.FORCE_SIZE)
+            icon.set_from_pixbuf(app_icon)
+
+            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+            box.pack_start(icon, False, True, 0)
+
+            listbox = Gtk.ListBox.new()
+            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+            listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
+            listbox.name = {"id": app_id,"name": app_name, "icon_name": icon_name, "icon": app_icon,
+                            "filename": filename}
+            listbox.add(box)
+
+            GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+            GLib.idle_add(self.ui_userpins_flowbox.show_all)
 
     def get_desktop_apps(self):
         apps = []
@@ -233,6 +277,12 @@ class MainWindow(object):
             return True
 
     def on_ui_add_to_userpins_button_clicked(self, button):
+        for row in self.ui_userpins_flowbox:
+            if self.right_clicked_app["id"] == row.get_children()[0].name["id"]:
+                print("{} already in pinned apps".format(self.right_clicked_app["id"]))
+                self.ui_apps_popover.popdown()
+                self.ui_apps_flowbox.unselect_all()
+                return
         icon = Gtk.Image.new()
         try:
             app_icon = Gtk.IconTheme.get_default().load_icon(self.right_clicked_app["icon_name"], 32,
@@ -258,6 +308,8 @@ class MainWindow(object):
 
         GLib.idle_add(self.ui_userpins_flowbox.show_all)
 
+        self.UserSettings.add_user_pinned_app(self.right_clicked_app["id"])
+
         self.ui_apps_popover.popdown()
         self.ui_apps_flowbox.unselect_all()
 
@@ -274,6 +326,8 @@ class MainWindow(object):
             self.ui_userpins_popover.popup()
 
     def on_ui_remove_from_userpins_button_clicked(self, button):
+        app_id = self.ui_userpins_flowbox.get_selected_children()[0].get_children()[0].name["id"]
+        self.UserSettings.remove_user_pinned_app(app_id)
         self.ui_userpins_flowbox.remove(self.ui_userpins_flowbox.get_selected_children()[0])
 
     def on_ui_add_to_panel_button_clicked(self, button):

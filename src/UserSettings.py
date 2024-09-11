@@ -6,8 +6,7 @@ Created on Thu Jul 25 14:53:13 2024
 @author: fatih
 """
 
-import os
-from configparser import ConfigParser
+import json
 from pathlib import Path
 
 import gi
@@ -18,64 +17,62 @@ from gi.repository import GLib
 
 class UserSettings(object):
     def __init__(self):
-        self.default_autostart = True
 
-        self.configdir = "{}/pardus/eta-help/".format(GLib.get_user_config_dir())
-        self.configfile = "settings.ini"
+        self.user_config_dir = Path.joinpath(Path(GLib.get_user_config_dir()), Path("eta-menu"))
+        self.user_pins_file = Path.joinpath(self.user_config_dir, Path("user-pins.json"))
 
-        self.autostartdir = "{}/autostart/".format(GLib.get_user_config_dir())
-        self.autostartfile = "tr.org.pardus.eta-menu-autostart.desktop"
+        if not Path.is_dir(self.user_config_dir):
+            self.create_dir(self.user_config_dir)
 
-        self.config = ConfigParser(strict=False)
+        if not Path.is_file(self.user_pins_file):
+            self.create_default_pins()
 
-        self.config_autostart = self.default_autostart
+    def add_user_pinned_app(self, app_id):
+        user_pins_file = open(self.user_pins_file, "r")
+        user_pins = json.load(user_pins_file)
 
-    def createDefaultConfig(self, force=False):
-        self.config['Main'] = {"autostart": self.default_autostart}
+        old_pins = user_pins["apps"]
+        new_pins = old_pins + [app_id]
+        user_pins["apps"] = new_pins
 
-        if not Path.is_file(Path(self.configdir + self.configfile)) or force:
-            if self.createDir(self.configdir):
-                with open(self.configdir + self.configfile, "w") as cf:
-                    self.config.write(cf)
+        new_cf = open(self.user_pins_file, "w")
+        new_cf.write(json.dumps(user_pins, indent=4))
+        new_cf.flush()
 
-    def readConfig(self):
+    def remove_user_pinned_app(self, app_id):
+        user_pins_file = open(self.user_pins_file, "r")
+        user_pins = json.load(user_pins_file)
+
+        if app_id in user_pins["apps"]:
+            user_pins["apps"].remove(app_id)
+
+        new_cf = open(self.user_pins_file, "w")
+        new_cf.write(json.dumps(user_pins, indent=4))
+        new_cf.flush()
+
+    def get_user_pins(self):
+        user_pins = []
+        if Path.is_file(self.user_pins_file):
+            user_pins_file = open(self.user_pins_file, "r")
+            user_pins = json.load(user_pins_file)
+        return user_pins
+
+    def create_dir(self, dir_path):
         try:
-            self.config.read(self.configdir + self.configfile)
-            self.config_autostart = self.config.getboolean('Main', 'autostart')
-
-        except Exception as e:
-            print("{}".format(e))
-            print("user config read error ! Trying create defaults")
-            # if not read; try to create defaults
-            self.config_autostart = self.default_autostart
-            try:
-                self.createDefaultConfig(force=True)
-            except Exception as e:
-                print("self.createDefaultConfig(force=True) : {}".format(e))
-
-    def writeConfig(self, status, temp, autostart):
-        self.config['Main'] = {"status": status, "temp": temp, "autostart": autostart}
-        if self.createDir(self.configdir):
-            with open(self.configdir + self.configfile, "w") as cf:
-                self.config.write(cf)
-                return True
-        return False
-
-    def createDir(self, dir):
-        try:
-            Path(dir).mkdir(parents=True, exist_ok=True)
+            Path(dir_path).mkdir(parents=True, exist_ok=True)
             return True
         except:
-            print("{} : {}".format("mkdir error", dir))
+            print("{} : {}".format("mkdir error", dir_path))
             return False
 
-    def set_autostart(self, state):
-        self.createDir(self.autostartdir)
-        p = Path(self.autostartdir + self.autostartfile)
-        if state:
-            if not p.exists():
-                p.symlink_to(
-                    os.path.dirname(os.path.abspath(__file__)) + "/../data/tr.org.pardus.eta-menu-autostart.desktop")
-        else:
-            if p.exists():
-                p.unlink(missing_ok=True)
+    def create_default_pins(self):
+        default_pins = {
+            "apps": [
+                "tr.org.pardus.pen.desktop",
+                "tr.org.pardus.eta-cinnamon-greeter.desktop"
+            ]
+        }
+
+        new_cf = open(self.user_pins_file, "w")
+        new_cf.write(json.dumps(default_pins, indent=4))
+        new_cf.flush()
