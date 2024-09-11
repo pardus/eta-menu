@@ -40,8 +40,6 @@ if os.path.exists(changelog):
 
 data_files = [
                  ("/usr/bin", ["eta-menu"]),
-                 ("/usr/share/applications",
-                  ["data/tr.org.pardus.eta-menu.desktop"]),
                  ("/usr/share/pardus/eta-menu/ui",
                   ["ui/MainWindow.glade"]),
                  ("/usr/share/pardus/eta-menu/src",
@@ -51,9 +49,12 @@ data_files = [
                    "src/Utils.py",
                    "src/__version__"]),
                  ("/usr/share/pardus/eta-menu/data",
-                  ["data/eta-menu.svg"]),
+                  ["data/eta-menu.svg",
+                   "data/eta-menu-panel-symbolic.svg",
+                   "data/tr.org.pardus.eta-menu.desktop"]),
                  ("/usr/share/icons/hicolor/scalable/apps/",
-                  ["data/eta-menu.svg", ])
+                  ["data/eta-menu.svg",
+                   "data/eta-menu-panel-symbolic.svg"])
              ] + create_mo_files()
 
 setup(
