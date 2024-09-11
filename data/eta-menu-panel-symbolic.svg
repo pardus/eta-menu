@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="256"
+   height="256"
+   viewBox="0 0 256 256"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="eta-menu-panel-symbolic.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="1.7988281"
+     inkscape:cx="172.61238"
+     inkscape:cy="167.88708"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="false" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g2"
+       transform="matrix(1.7048447,0,0,1.7048447,-630.05292,-782.83003)">
+      <g
+         id="g198"
+         transform="matrix(2.1624817,0,0,2.1624817,-124.90239,-9130.9368)">
+        <polygon
+           class="cls-3"
+           points="1906,1607.3 1906.1,1607.4 2058.5,1514.3 2058.5,1430.3 1906.1,1375.9 1906,1375.9 1905.9,1375.9 1753.5,1430.3 1753.5,1514.3 1905.9,1607.4 "
+           id="polygon191"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-3"
+           points="1876.6,1245.2 1776.9,1139.7 2035.2,1139.7 1935.4,1245.2 1939.4,1331 2137.8,1409.5 2207.8,1343.1 2045,1212.3 2235.5,1316.8 2254.8,1298.5 2143.8,1073.9 1906,989 1668.2,1073.9 1557.2,1298.5 1576.6,1316.8 1767,1212.3 1604.3,1343.1 1674.3,1409.5 1872.6,1331 "
+           id="polygon192"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-4"
+           points="1906,1375.9 1905.9,1375.9 1753.5,1430.3 1753.5,1514.3 1905.9,1607.3 1906,1607.3 "
+           id="polygon193"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-4"
+           points="1776.9,1139.7 1906,1139.7 1906,989 1668.2,1073.9 1557.2,1298.5 1576.6,1316.8 1767,1212.3 1604.3,1343.1 1674.3,1409.5 1872.6,1331 1876.6,1245.2 "
+           id="polygon194"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-6"
+           points="1507.9,839.8 1629.3,938 1754.2,938 1743.5,995.1 1816.7,934.4 "
+           id="polygon195"
+           style="opacity:0.88;fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-7"
+           points="1816.7,934.4 1741.7,839.8 1507.9,839.8 "
+           id="polygon196"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-6"
+           points="2304.2,839.8 2182.8,938 2057.9,938 2068.6,995.1 1995.4,934.4 "
+           id="polygon197"
+           style="opacity:0.88;fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+        <polygon
+           class="cls-7"
+           points="1995.4,934.4 2070.4,839.8 2304.2,839.8 "
+           id="polygon198"
+           style="fill:#f9f9f9"
+           transform="matrix(0.08205223,0,0,0.08205223,106.9817,4369.0938)" />
+      </g>
+    </g>
+  </g>
+</svg>
