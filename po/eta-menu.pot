@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-09 19:10+0300\n"
+"POT-Creation-Date: 2024-09-12 13:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,43 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ui/MainWindow.glade:193
+#: ui/MainWindow.glade:45
+msgid "Add to Favorites"
+msgstr ""
+
+#: ui/MainWindow.glade:90
+msgid "Add to Panel"
+msgstr ""
+
+#: ui/MainWindow.glade:135
+msgid "Add to Desktop"
+msgstr ""
+
+#: ui/MainWindow.glade:493
+msgid "Pardus"
+msgstr ""
+
+#: ui/MainWindow.glade:520
 msgid "ETA Menu."
 msgstr ""
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:196
+#: ui/MainWindow.glade:523
 msgid "translator-credits"
 msgstr ""
 
-#: src/MainWindow.py:49
+#: ui/MainWindow.glade:582
+msgid "Remove from Favorites"
+msgstr ""
+
+#: src/MainWindow.py:60
 msgid "ETA Menu"
 msgstr ""
 
-#: src/MainWindow.py:53
+#: src/MainWindow.py:64
 msgid "About ETA Menu"
+msgstr ""
+
+#: src/MainWindow.py:417
+msgid "Error"
 msgstr ""
