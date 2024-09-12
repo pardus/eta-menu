@@ -243,11 +243,11 @@ class MainWindow(object):
             description = app.get_description() or app.get_generic_name() or app.get_name()
             filename = app.get_filename()
             keywords = " ".join(app.get_keywords())
-
+            categories = app.get_categories() if app.get_categories() else ""
             if executable and not nodisplay:
                 apps.append(
                     {"id": app_id, "name": app_name, "icon_name": icon_name, "description": description, "filename": filename,
-                     "keywords": keywords, "executable": executable})
+                     "keywords": keywords, "executable": executable, "categories": categories})
 
         apps = sorted(dict((v['name'], v) for v in apps).values(), key=lambda x: locale.strxfrm(x["name"]))
         return apps
@@ -287,7 +287,11 @@ class MainWindow(object):
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.connect("button-release-event", self.on_apps_listbox_released, listbox)
             listbox.name = {"id": desktop_app["id"], "name": desktop_app["name"], "icon_name": desktop_app["icon_name"],
-                            "icon": app_icon, "filename": desktop_app["filename"]}
+                            "icon": app_icon, "filename": desktop_app["filename"],
+                            "description": desktop_app["description"],
+                            "keywords": desktop_app["keywords"],
+                            "executable": desktop_app["executable"],
+                            "categories": desktop_app["categories"]}
 
             GLib.idle_add(listbox.add, box)
 
@@ -325,7 +329,9 @@ class MainWindow(object):
     def apps_filter_function(self, row):
         search = self.ui_apps_searchentry.get_text().lower()
         app = row.get_children()[0].name
-        if search in app["name"].lower():
+        if (search in app["name"].lower() or search in app["description"].lower()
+                or search in app["executable"].lower() or search in app["categories"].lower()
+                or search in app["keywords"].lower()):
             return True
 
     def on_ui_add_to_userpins_button_clicked(self, button):
