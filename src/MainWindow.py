@@ -9,7 +9,6 @@ import json
 import os
 import signal
 import subprocess
-import webbrowser
 
 import gi
 
@@ -486,7 +485,7 @@ class MainWindow(object):
 
     def on_ui_browser_button_clicked(self, button):
         self.ui_main_window.hide()
-        webbrowser.open_new("")
+        subprocess.Popen(["xdg-open", "http:"])
 
     def on_ui_cinnamonsettings_button_clicked(self, button):
         self.ui_main_window.hide()
