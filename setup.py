@@ -52,6 +52,10 @@ data_files = [
                   ["data/eta-menu.svg",
                    "data/eta-menu-panel-symbolic.svg",
                    "data/tr.org.pardus.eta-menu.desktop"]),
+                 ("/usr/share/pardus/eta-menu/data/css",
+                  ["data/css/adw.css",
+                   "data/css/all.css",
+                   "data/css/base.css"]),
                  ("/usr/share/icons/hicolor/scalable/apps/",
                   ["data/eta-menu.svg",
                    "data/eta-menu-panel-symbolic.svg"])
