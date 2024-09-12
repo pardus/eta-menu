@@ -44,6 +44,8 @@ class MainWindow(object):
         self.define_components()
         self.define_variables()
 
+        self.set_css()
+
         self.set_desktop_apps()
         self.control_display()
         self.focus_search()
@@ -105,6 +107,9 @@ class MainWindow(object):
 
         self.ui_apps_flowbox.set_filter_func(self.apps_filter_function)
 
+        self.ui_apps_flowbox.get_style_context().add_class("eta-menu-flowbox")
+        self.ui_userpins_flowbox.get_style_context().add_class("eta-menu-flowbox")
+
     def define_variables(self):
         self.trigger_in_progress = False
         self.monitoring_id = None
@@ -129,6 +134,22 @@ class MainWindow(object):
 
         except Exception as e:
             print("control_display: {}".format(e))
+
+    def set_css(self):
+        settings = Gtk.Settings.get_default()
+        theme_name = "{}".format(settings.get_property('gtk-theme-name')).lower().strip()
+
+
+        cssProvider = Gtk.CssProvider()
+        if theme_name.startswith("pardus") or theme_name.startswith("adwaita"):
+            cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../data/css/all.css")
+        elif theme_name.startswith("adw-gtk3") or theme_name.startswith("eta"):
+            cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../data/css/adw.css")
+        else:
+            cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../data/css/base.css")
+        screen = Gdk.Screen.get_default()
+        styleContext = Gtk.StyleContext()
+        styleContext.add_provider_for_screen(screen, cssProvider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
     def set_username(self):
         username = GLib.get_user_name()
@@ -226,6 +247,7 @@ class MainWindow(object):
             listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
             listbox.name = {"id": app_id,"name": app_name, "icon_name": icon_name, "icon": app_icon,
                             "filename": filename}
+            listbox.get_style_context().add_class("eta-menu-listbox")
             listbox.add(box)
 
             GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
@@ -292,7 +314,7 @@ class MainWindow(object):
                             "keywords": desktop_app["keywords"],
                             "executable": desktop_app["executable"],
                             "categories": desktop_app["categories"]}
-
+            listbox.get_style_context().add_class("eta-menu-listbox")
             GLib.idle_add(listbox.add, box)
 
             GLib.idle_add(self.ui_apps_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
@@ -360,6 +382,7 @@ class MainWindow(object):
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
         listbox.name = self.right_clicked_app
+        listbox.get_style_context().add_class("eta-menu-listbox")
         listbox.add(box)
 
         GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
