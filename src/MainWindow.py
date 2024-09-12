@@ -435,6 +435,11 @@ class MainWindow(object):
         self.ui_apps_popover.popdown()
         self.ui_apps_flowbox.unselect_all()
 
+    def on_ui_main_window_key_release_event(self, widget, event):
+        if event.keyval == Gdk.KEY_Escape:
+            self.ui_main_window.hide()
+            return True
+
     def on_ui_apps_searchentry_search_changed(self, search_entry):
         self.ui_apps_flowbox.invalidate_filter()
 
