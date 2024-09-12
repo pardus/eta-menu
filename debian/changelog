@@ -1,5 +1,31 @@
-eta-menu (0.0.1) unstable; urgency=medium
+eta-menu (1.0.0) unstable; urgency=medium
 
   * Initial Commit
+  * Add get desktop apps and show on ui
+  * Update pot file
+  * Update Turkish translations
+  * Fix typo
+  * Add focus on search and control display on present
+  * Add focus search to present
+  * Fix focus, present order
+  * Add reset scrolledwindow to present
+  * Add hide window to open app and other buttons
+  * Add mainwindow visible control to present
+  * Add skip_taskbar_hint
+  * Add pardus-about to about button
+  * Add web,settings,terminal,filemanager buttons
+  * Add username to menu
+  * Use FlowBox instead of IconView and Add favorites section
+  * Fix typo
+  * Add add to panel and desktop buttons to apps right click menu
+  * Use flowbox activated signal for app left click
+  * Add get,set user pinned apps from config file
+  * Add data dir monitoring
+  * Update icon
+  * Update setup.py
+  * Improve app search
+  * Add close on ESC key released
+  * Update pot file
+  * Update Turkish translations
 
- -- Fatih Altun <fatih.altun@pardus.org.tr>  Sun, 20 Aug 2023 16:25:25 +0300
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Thu, 12 Sep 2024 13:32:18 +0300
