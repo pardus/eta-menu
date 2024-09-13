@@ -91,6 +91,7 @@ class MainWindow(object):
         self.ui_main_window = self.GtkBuilder.get_object("ui_main_window")
         self.ui_main_window.set_skip_taskbar_hint(True)
         self.ui_about_dialog = self.GtkBuilder.get_object("ui_about_dialog")
+        self.ui_about_button = self.GtkBuilder.get_object("ui_about_button")
 
         self.ui_apps_searchentry = self.GtkBuilder.get_object("ui_apps_searchentry")
         self.ui_apps_scrolledwindow = self.GtkBuilder.get_object("ui_apps_scrolledwindow")
@@ -172,7 +173,8 @@ class MainWindow(object):
         v_adj.set_value(v_adj.get_lower())
 
     def focus_search(self):
-        self.ui_apps_searchentry.grab_focus()
+        GLib.idle_add(self.ui_about_button.grab_focus)
+        GLib.idle_add(self.ui_apps_searchentry.grab_focus)
 
     def start_monitoring(self):
         data_dirs = []
