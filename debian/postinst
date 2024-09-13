@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# configure: Indicates that the configuration is being done
+# after the first installation or an update.
+
+# If the package is in the process of being upgraded,
+# the variable $2 contains the previous version number.
+# So, if $2 is not empty, it is an upgrade.
+
+if [[ "$1" == "configure" ]]; then
+    if [[ "$2" != "" ]]; then
+        echo "killing eta-menu process for current app version"
+        killall eta-menu 2>/dev/null || true
+    fi
+fi
+
+exit 0
