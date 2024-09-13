@@ -1,3 +1,20 @@
+eta-menu (1.0.1) unstable; urgency=medium
+
+  * Add child_activated signal to userpins_flowbox
+  * Rm min size of apps scrolled window
+  * Add seperate box for user pinned apps
+  * Fix apps flowbox vertical size
+  * Add some css for flowbox and listbox
+  * Add css files to setup.py
+  * Update open default browser command
+  * Optimize add user pinned app to ui
+  * Add postinst script
+  * Add +x to postinst
+  * Add remember window size
+  * Reformat Code
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 13 Sep 2024 16:11:27 +0300
+
 eta-menu (1.0.0) unstable; urgency=medium
 
   * Initial Commit
