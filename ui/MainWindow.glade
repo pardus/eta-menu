@@ -161,6 +161,7 @@
     <signal name="destroy" handler="on_ui_main_window_destroy" swapped="no"/>
     <signal name="focus-out-event" handler="on_ui_main_window_focus_out_event" swapped="no"/>
     <signal name="key-release-event" handler="on_ui_main_window_key_release_event" swapped="no"/>
+    <signal name="show" handler="on_ui_main_window_show" swapped="no"/>
     <child>
       <object class="GtkBox" id="ui_main_box">
         <property name="visible">True</property>

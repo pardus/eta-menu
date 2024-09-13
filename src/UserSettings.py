@@ -8,6 +8,7 @@ Created on Thu Jul 25 14:53:13 2024
 
 import json
 from pathlib import Path
+import configparser
 
 import gi
 
@@ -20,12 +21,65 @@ class UserSettings(object):
 
         self.user_config_dir = Path.joinpath(Path(GLib.get_user_config_dir()), Path("eta-menu"))
         self.user_pins_file = Path.joinpath(self.user_config_dir, Path("user-pins.json"))
+        self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
+
+        # window configs
+        self.config_window_width = None
+        self.config_window_height = None
+
+        # window defaults
+        self.default_window_width = 0
+        self.default_window_height = 0
+
+        self.config = configparser.ConfigParser(strict=False)
 
         if not Path.is_dir(self.user_config_dir):
             self.create_dir(self.user_config_dir)
 
         if not Path.is_file(self.user_pins_file):
             self.create_default_pins()
+
+    def create_default_config(self, force=False):
+        self.config["WINDOW"] = {"window_width": self.default_window_width,
+                                 "window_height": self.default_window_height}
+
+        if not Path.is_file(self.user_config_file) or force:
+            if self.create_dir(self.user_config_dir):
+                with open(self.user_config_file, "w") as cf:
+                    self.config.write(cf)
+
+    def read_config(self):
+        try:
+            self.config.read(self.user_config_file)
+            self.config_window_width = self.config.getint("WINDOW", "window_width")
+            self.config_window_height = self.config.getint("WINDOW", "window_height")
+        except Exception as e:
+            print("{}".format(e))
+            print("user config read error ! Trying create defaults")
+            # if not read; try to create defaults
+            self.config_window_width = self.default_window_width
+            self.config_window_height = self.default_window_height
+            try:
+                self.create_default_config(force=True)
+            except Exception as e:
+                print("self.create_default_config(force=True) : {}".format(e))
+
+    def write_config(self, window_width="", window_height=""):
+        if window_width == "":
+            window_width = self.config_window_width
+        if window_height == "":
+            window_height = self.config_window_height
+
+        self.config["WINDOW"] = {
+            "window_width": window_width,
+            'window_height': window_height
+        }
+
+        if self.create_dir(self.user_config_dir):
+            with open(self.user_config_file, "w") as cf:
+                self.config.write(cf)
+                return True
+        return False
 
     def add_user_pinned_app(self, app_id):
         user_pins_file = open(self.user_pins_file, "r")

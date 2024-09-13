@@ -39,20 +39,19 @@ class MainWindow(object):
             raise
 
 
-
         self.define_components()
         self.define_variables()
 
-        self.set_css()
+        self.ui_main_window.set_application(application)
 
+        self.set_css()
         self.set_desktop_apps()
-        self.control_display()
         self.focus_search()
         self.set_username()
 
-        self.ui_main_window.set_application(application)
-
         self.user_settings()
+
+        # self.control_display()
 
         self.create_user_pinned_apps_from_file()
 
@@ -116,22 +115,31 @@ class MainWindow(object):
 
     def user_settings(self):
         self.UserSettings = UserSettings()
+        self.UserSettings.create_default_config()
+        self.UserSettings.read_config()
 
     def control_display(self):
+        print("in control_display")
         try:
             display = Gdk.Display.get_default()
             monitor = display.get_primary_monitor()
             geometry = monitor.get_geometry()
             w = geometry.width
             h = geometry.height
-            s = Gdk.Monitor.get_scale_factor(monitor)
 
-            width = w / 3
-            height = h / 2
+            width = int(w / 3)
+            height = int(h / 2)
 
-            self.ui_main_window.resize(width, height)
-            self.ui_main_window.move(0, h - height)
+            if self.UserSettings.config_window_width == 0 and self.UserSettings.config_window_height == 0:
+                print("first run without config, so setting the window size as dynamically {} {}".format(width, height))
+                self.ui_main_window.resize(width, height)
+                self.UserSettings.write_config(window_width=width, window_height=height)
+                self.user_settings()
+            else:
+                self.ui_main_window.resize(self.UserSettings.config_window_width,
+                                           self.UserSettings.config_window_height)
 
+            self.ui_main_window.move(0, h)
         except Exception as e:
             print("control_display: {}".format(e))
 
@@ -251,8 +259,6 @@ class MainWindow(object):
 
         GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
         GLib.idle_add(self.ui_userpins_flowbox.show_all)
-        print(self.right_clicked_app)
-
 
     def get_desktop_apps(self):
         apps = []
@@ -487,7 +493,14 @@ class MainWindow(object):
         self.ui_main_window.hide()
         subprocess.Popen(["pardus-about"])
 
-    def on_ui_main_window_delete_event(self, widget, event):
+    def on_ui_main_window_delete_event(self, window, event):
+        current_width, current_height = window.get_size()
+        try:
+            self.UserSettings.write_config(window_width=current_width, window_height=current_height)
+            self.user_settings()
+        except Exception as e:
+            print("{}".format(e))
+
         self.ui_main_window.hide()
         return True
 
@@ -496,6 +509,16 @@ class MainWindow(object):
             self.ui_about_dialog.hide()
         self.ui_main_window.get_application().quit()
 
-    def on_ui_main_window_focus_out_event(self, widget, event):
+    def on_ui_main_window_focus_out_event(self, window, event):
+        current_width, current_height = window.get_size()
+        try:
+            self.UserSettings.write_config(window_width=current_width, window_height=current_height)
+            self.user_settings()
+        except Exception as e:
+            print("{}".format(e))
+
         self.ui_main_window.hide()
         return True
+
+    def on_ui_main_window_show(self, window):
+        self.control_display()
