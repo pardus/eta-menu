@@ -17,7 +17,7 @@ gi.require_version("Gtk", "3.0")
 gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import Gtk, GObject, Gio, GLib, GdkPixbuf, Gdk
 from UserSettings import UserSettings
-from Utils import Utils, ErrorDialog
+from Utils import ErrorDialog
 
 import locale
 from locale import gettext as _
@@ -37,7 +37,6 @@ class MainWindow(object):
         except GObject.GError:
             print("Error reading GUI file: " + self.main_window_ui_filename)
             raise
-
 
         self.define_components()
         self.define_variables()
@@ -147,7 +146,6 @@ class MainWindow(object):
         settings = Gtk.Settings.get_default()
         theme_name = "{}".format(settings.get_property('gtk-theme-name')).lower().strip()
 
-
         cssProvider = Gtk.CssProvider()
         if theme_name.startswith("pardus") or theme_name.startswith("adwaita"):
             cssProvider.load_from_path(os.path.dirname(os.path.abspath(__file__)) + "/../data/css/all.css")
@@ -175,7 +173,6 @@ class MainWindow(object):
 
     def focus_search(self):
         self.ui_apps_searchentry.grab_focus()
-
 
     def start_monitoring(self):
         data_dirs = []
@@ -275,8 +272,9 @@ class MainWindow(object):
             categories = app.get_categories() if app.get_categories() else ""
             if executable and not nodisplay:
                 apps.append(
-                    {"id": app_id, "name": app_name, "icon_name": icon_name, "description": description, "filename": filename,
-                     "keywords": keywords, "executable": executable, "categories": categories})
+                    {"id": app_id, "name": app_name, "icon_name": icon_name, "description": description,
+                     "filename": filename, "keywords": keywords, "executable": executable,
+                     "categories": categories})
 
         apps = sorted(dict((v['name'], v) for v in apps).values(), key=lambda x: locale.strxfrm(x["name"]))
         return apps
@@ -434,10 +432,12 @@ class MainWindow(object):
         self.ui_apps_flowbox.unselect_all()
 
     def on_ui_add_to_desktop_button_clicked(self, button):
-        source = Gio.File.new_for_path(self.ui_apps_flowbox.get_selected_children()[0].get_children()[0].name["filename"])
-        dest = Gio.File.new_for_path(GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP) + "/" + source.get_basename())
+        source = Gio.File.new_for_path(
+            self.ui_apps_flowbox.get_selected_children()[0].get_children()[0].name["filename"])
+        dest = Gio.File.new_for_path(
+            GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP) + "/" + source.get_basename())
 
-        source.copy(dest, Gio.FileCopyFlags.OVERWRITE , None, None, None)
+        source.copy(dest, Gio.FileCopyFlags.OVERWRITE, None, None, None)
 
         file_info = Gio.FileInfo.new()
         file_info.set_attribute_uint32("unix::mode", 0o755)

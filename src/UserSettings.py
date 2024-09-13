@@ -6,9 +6,9 @@ Created on Thu Jul 25 14:53:13 2024
 @author: fatih
 """
 
+import configparser
 import json
 from pathlib import Path
-import configparser
 
 import gi
 

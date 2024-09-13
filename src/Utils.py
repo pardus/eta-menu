@@ -7,15 +7,18 @@ Created on Wed Mar 20 23:59:23 2024
 """
 import os
 import subprocess
+
 import gi
+
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk
 
 import locale
 from locale import gettext as _
 
 locale.bindtextdomain('pardus-update', '/usr/share/locale')
 locale.textdomain('pardus-update')
+
 
 class Utils(object):
     def __init__(self):
@@ -119,6 +122,7 @@ class Utils(object):
         #     print("{} is not readable.".format(path))
         return path_files
 
+
 class Dialog(Gtk.MessageDialog):
     def __init__(self, style, buttons, title, text, text2=None, parent=None):
         Gtk.MessageDialog.__init__(self, parent, 0, style, buttons)
@@ -131,6 +135,7 @@ class Dialog(Gtk.MessageDialog):
             response = self.run()
         finally:
             self.destroy()
+
 
 def ErrorDialog(*args):
     dialog = Dialog(Gtk.MessageType.ERROR, Gtk.ButtonsType.NONE, *args)
