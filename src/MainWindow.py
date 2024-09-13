@@ -112,6 +112,7 @@ class MainWindow(object):
     def define_variables(self):
         self.trigger_in_progress = False
         self.monitoring_id = None
+        self.right_clicked_app = None
 
     def user_settings(self):
         self.UserSettings = UserSettings()
@@ -220,37 +221,38 @@ class MainWindow(object):
                 continue
             app_id = app.get_id()
             app_name = app.get_name()
-            executable = app.get_executable()
-            nodisplay = app.get_nodisplay()
-            icon_name = app.get_string('Icon')
-            description = app.get_description() or app.get_generic_name() or app.get_name()
-            filename = app.get_filename()
-            keywords = " ".join(app.get_keywords())
+            app_icon_name = app.get_string('Icon')
+            app_filename = app.get_filename()
 
-            icon = Gtk.Image.new()
+            self.add_user_pinned_app_to_ui(app_id, app_name, app_icon_name, app_filename)
+
+    def add_user_pinned_app_to_ui(self, app_id, app_name, app_icon_name, app_filename):
+        icon = Gtk.Image.new()
+        try:
+            app_icon = Gtk.IconTheme.get_default().load_icon(app_icon_name, 32, Gtk.IconLookupFlags.FORCE_SIZE)
+        except:
             try:
-                app_icon = Gtk.IconTheme.get_default().load_icon(icon_name, 32, Gtk.IconLookupFlags.FORCE_SIZE)
+                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 32, 32)
             except:
-                try:
-                    app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(icon_name, 32, 32)
-                except:
-                    app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
-                                                                     Gtk.IconLookupFlags.FORCE_SIZE)
-            icon.set_from_pixbuf(app_icon)
+                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
+                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
+        icon.set_from_pixbuf(app_icon)
 
-            box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-            box.pack_start(icon, False, True, 0)
+        box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
+        box.pack_start(icon, False, True, 0)
 
-            listbox = Gtk.ListBox.new()
-            listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-            listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
-            listbox.name = {"id": app_id,"name": app_name, "icon_name": icon_name, "icon": app_icon,
-                            "filename": filename}
-            listbox.get_style_context().add_class("eta-menu-listbox")
-            listbox.add(box)
+        listbox = Gtk.ListBox.new()
+        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
+        listbox.name = {"id": app_id, "name": app_name, "icon_name": app_icon_name, "icon": app_icon,
+                        "filename": app_filename}
+        listbox.get_style_context().add_class("eta-menu-listbox")
+        GLib.idle_add(listbox.add, box)
 
-            GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
-            GLib.idle_add(self.ui_userpins_flowbox.show_all)
+        GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self.ui_userpins_flowbox.show_all)
+        print(self.right_clicked_app)
+
 
     def get_desktop_apps(self):
         apps = []
@@ -362,31 +364,9 @@ class MainWindow(object):
                 self.ui_apps_popover.popdown()
                 self.ui_apps_flowbox.unselect_all()
                 return
-        icon = Gtk.Image.new()
-        try:
-            app_icon = Gtk.IconTheme.get_default().load_icon(self.right_clicked_app["icon_name"], 32,
-                                                             Gtk.IconLookupFlags.FORCE_SIZE)
-        except:
-            try:
-                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(self.right_clicked_app["icon_name"], 32, 32)
-            except:
-                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
-                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
-        icon.set_from_pixbuf(app_icon)
 
-        box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
-        box.pack_start(icon, False, True, 0)
-
-        listbox = Gtk.ListBox.new()
-        listbox.set_selection_mode(Gtk.SelectionMode.NONE)
-        listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
-        listbox.name = self.right_clicked_app
-        listbox.get_style_context().add_class("eta-menu-listbox")
-        listbox.add(box)
-
-        GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
-
-        GLib.idle_add(self.ui_userpins_flowbox.show_all)
+        self.add_user_pinned_app_to_ui(self.right_clicked_app["id"], self.right_clicked_app["name"],
+                                       self.right_clicked_app["icon_name"], self.right_clicked_app["filename"])
 
         self.UserSettings.add_user_pinned_app(self.right_clicked_app["id"])
 
