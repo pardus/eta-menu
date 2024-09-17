@@ -9,6 +9,7 @@ Created on Thu Jul 25 14:53:13 2024
 import configparser
 import json
 from pathlib import Path
+import shutil
 
 import gi
 
@@ -19,9 +20,11 @@ from gi.repository import GLib
 class UserSettings(object):
     def __init__(self):
 
-        self.user_config_dir = Path.joinpath(Path(GLib.get_user_config_dir()), Path("eta-menu"))
-        self.user_pins_file = Path.joinpath(self.user_config_dir, Path("user-pins.json"))
+        self.user_config_dir = Path.joinpath(Path(GLib.get_user_config_dir()), Path("eta/eta-menu"))
+        self.user_favorites_file = Path.joinpath(self.user_config_dir, Path("favorites.json"))
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
+
+        self.system_favorites_file = Path("/etc/eta/eta-menu/favorites.json")
 
         # window configs
         self.config_window_remember_size = None
@@ -38,7 +41,7 @@ class UserSettings(object):
         if not Path.is_dir(self.user_config_dir):
             self.create_dir(self.user_config_dir)
 
-        if not Path.is_file(self.user_pins_file):
+        if not Path.is_file(self.user_favorites_file):
             self.create_default_pins()
 
     def create_default_config(self, force=False):
@@ -91,32 +94,32 @@ class UserSettings(object):
         return False
 
     def add_user_pinned_app(self, app_id):
-        user_pins_file = open(self.user_pins_file, "r")
+        user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
         old_pins = user_pins["apps"]
         new_pins = old_pins + [app_id]
         user_pins["apps"] = new_pins
 
-        new_cf = open(self.user_pins_file, "w")
+        new_cf = open(self.user_favorites_file, "w")
         new_cf.write(json.dumps(user_pins, indent=4))
         new_cf.flush()
 
     def remove_user_pinned_app(self, app_id):
-        user_pins_file = open(self.user_pins_file, "r")
+        user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
         if app_id in user_pins["apps"]:
             user_pins["apps"].remove(app_id)
 
-        new_cf = open(self.user_pins_file, "w")
+        new_cf = open(self.user_favorites_file, "w")
         new_cf.write(json.dumps(user_pins, indent=4))
         new_cf.flush()
 
     def get_user_pins(self):
         user_pins = []
-        if Path.is_file(self.user_pins_file):
-            user_pins_file = open(self.user_pins_file, "r")
+        if Path.is_file(self.user_favorites_file):
+            user_pins_file = open(self.user_favorites_file, "r")
             user_pins = json.load(user_pins_file)
         return user_pins
 
@@ -129,13 +132,16 @@ class UserSettings(object):
             return False
 
     def create_default_pins(self):
-        default_pins = {
-            "apps": [
-                "tr.org.pardus.pen.desktop",
-                "tr.org.pardus.eta-cinnamon-greeter.desktop"
-            ]
-        }
-
-        new_cf = open(self.user_pins_file, "w")
-        new_cf.write(json.dumps(default_pins, indent=4))
-        new_cf.flush()
+        if Path.is_file(self.system_favorites_file):
+            shutil.copy2(self.system_favorites_file, self.user_favorites_file)
+        else:
+            default_pins = {
+                "apps": [
+                    "google-chrome.desktop",
+                    "tr.org.pardus.pen.desktop",
+                    "tr.org.pardus.eta-cinnamon-greeter.desktop"
+                ]
+            }
+            new_cf = open(self.user_favorites_file, "w")
+            new_cf.write(json.dumps(default_pins, indent=4))
+            new_cf.flush()
