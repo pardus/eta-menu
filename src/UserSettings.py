@@ -116,11 +116,40 @@ class UserSettings(object):
         new_cf.write(json.dumps(user_pins, indent=4))
         new_cf.flush()
 
+    def move_up_user_pinned_app(self, item):
+        user_pins_file = open(self.user_favorites_file, "r")
+        user_pins = json.load(user_pins_file)
+
+        index = user_pins["apps"].index(item)
+        if index > 0:
+            user_pins["apps"][index], user_pins["apps"][index - 1] = user_pins["apps"][index - 1], user_pins["apps"][index]
+
+            new_cf = open(self.user_favorites_file, "w")
+            new_cf.write(json.dumps(user_pins, indent=4))
+            new_cf.flush()
+
+    def move_down_user_pinned_app(self, item):
+        user_pins_file = open(self.user_favorites_file, "r")
+        user_pins = json.load(user_pins_file)
+
+        index = user_pins["apps"].index(item)
+        if index < len(user_pins["apps"]) - 1:
+            user_pins["apps"][index], user_pins["apps"][index + 1] = user_pins["apps"][index + 1], user_pins["apps"][index]
+
+            new_cf = open(self.user_favorites_file, "w")
+            new_cf.write(json.dumps(user_pins, indent=4))
+            new_cf.flush()
+
     def get_user_pins(self):
         user_pins = []
         if Path.is_file(self.user_favorites_file):
             user_pins_file = open(self.user_favorites_file, "r")
             user_pins = json.load(user_pins_file)
+        else:
+            if Path.is_file(self.system_favorites_file):
+                shutil.copy2(self.system_favorites_file, self.user_favorites_file)
+                user_pins_file = open(self.user_favorites_file, "r")
+                user_pins = json.load(user_pins_file)
         return user_pins
 
     def create_dir(self, dir_path):

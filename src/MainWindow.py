@@ -111,6 +111,10 @@ class MainWindow(object):
         self.ui_apps_flowbox.get_style_context().add_class("eta-menu-flowbox")
         self.ui_userpins_flowbox.get_style_context().add_class("eta-menu-flowbox")
 
+        GLib.idle_add(self.ui_userpins_popover.set_visible, False)
+        GLib.idle_add(self.ui_userpins_popover.set_relative_to, self.ui_userpins_flowbox)
+        GLib.idle_add(self.ui_userpins_popover.popdown)
+
     def define_variables(self):
         self.trigger_in_progress = False
         self.monitoring_id = None
@@ -404,9 +408,10 @@ class MainWindow(object):
         #     Gio.DesktopAppInfo.new(listbox.name["id"]).launch([], None)
         if event.button == 3:
             print(f"Right clicked: {listbox.name}")
-            self.ui_userpins_flowbox.select_child(listbox.get_parent())
-            self.ui_userpins_popover.set_relative_to(listbox)
-            self.ui_userpins_popover.popup()
+            GLib.idle_add(self.ui_userpins_flowbox.select_child, listbox.get_parent())
+            GLib.idle_add(self.ui_userpins_popover.set_visible, True)
+            GLib.idle_add(self.ui_userpins_popover.set_relative_to, listbox)
+            GLib.idle_add(self.ui_userpins_popover.popup)
 
     def on_ui_userpins_flowbox_child_activated(self, flowbox, child):
         print(f"Left clicked: {child.get_children()[0].name}")
@@ -418,6 +423,41 @@ class MainWindow(object):
         app_id = self.ui_userpins_flowbox.get_selected_children()[0].get_children()[0].name["id"]
         self.UserSettings.remove_user_pinned_app(app_id)
         self.ui_userpins_flowbox.remove(self.ui_userpins_flowbox.get_selected_children()[0])
+
+    def on_ui_moveup_userpin_button_clicked(self, button):
+        app_id = self.ui_userpins_flowbox.get_selected_children()[0].get_children()[0].name["id"]
+        print("Moving up: {}".format(app_id))
+
+        GLib.idle_add(self.UserSettings.move_up_user_pinned_app, app_id)
+
+        for row in self.ui_userpins_flowbox:
+            GLib.idle_add(self.ui_userpins_flowbox.remove, row)
+
+        GLib.idle_add(self.create_user_pinned_apps_from_file)
+
+        GLib.idle_add(self.ui_userpins_popover.set_visible, False)
+        GLib.idle_add(self.ui_userpins_popover.set_relative_to, self.ui_userpins_flowbox)
+        GLib.idle_add(self.ui_userpins_popover.popdown)
+
+        GLib.idle_add(self.ui_userpins_flowbox.unselect_all)
+
+
+    def on_ui_movedown_userpin_button_clicked(self, button):
+        app_id = self.ui_userpins_flowbox.get_selected_children()[0].get_children()[0].name["id"]
+        print("Moving down: {}".format(app_id))
+
+        self.UserSettings.move_down_user_pinned_app(app_id)
+
+        for row in self.ui_userpins_flowbox:
+            GLib.idle_add(self.ui_userpins_flowbox.remove, row)
+
+        GLib.idle_add(self.create_user_pinned_apps_from_file)
+
+        GLib.idle_add(self.ui_userpins_popover.set_visible, False)
+        GLib.idle_add(self.ui_userpins_popover.set_relative_to, self.ui_userpins_flowbox)
+        GLib.idle_add(self.ui_userpins_popover.popdown)
+
+        GLib.idle_add(self.ui_userpins_flowbox.unselect_all)
 
     def on_ui_add_to_panel_button_clicked(self, button):
 
