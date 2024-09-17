@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 17:04+0300\n"
+"POT-Creation-Date: 2024-09-17 18:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,10 @@ msgstr ""
 msgid "Remove from Favorites"
 msgstr ""
 
+#: ui/MainWindow.glade:792
+msgid "Move"
+msgstr ""
+
 #: src/MainWindow.py:59
 msgid "ETA Menu"
 msgstr ""
@@ -62,10 +66,10 @@ msgstr ""
 msgid "About ETA Menu"
 msgstr ""
 
-#: src/MainWindow.py:387
+#: src/MainWindow.py:391
 msgid "{} already in favorite apps."
 msgstr ""
 
-#: src/MainWindow.py:448
+#: src/MainWindow.py:488
 msgid "Error"
 msgstr ""
