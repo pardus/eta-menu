@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 17:04+0300\n"
-"PO-Revision-Date: 2024-09-17 17:01+0300\n"
+"POT-Creation-Date: 2024-09-17 18:38+0300\n"
+"PO-Revision-Date: 2024-09-17 18:37+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -56,6 +56,10 @@ msgstr "Fatih Altun <fatih.altun@pardus.org.tr>"
 msgid "Remove from Favorites"
 msgstr "Favorilerden Kaldır"
 
+#: ui/MainWindow.glade:792
+msgid "Move"
+msgstr "Taşı"
+
 #: src/MainWindow.py:59
 msgid "ETA Menu"
 msgstr "Eta Menü"
@@ -64,10 +68,10 @@ msgstr "Eta Menü"
 msgid "About ETA Menu"
 msgstr "Eta Menü Hakkında"
 
-#: src/MainWindow.py:387
+#: src/MainWindow.py:391
 msgid "{} already in favorite apps."
 msgstr "{} zaten favori uygulamalarınızda."
 
-#: src/MainWindow.py:448
+#: src/MainWindow.py:488
 msgid "Error"
 msgstr "Hata"
