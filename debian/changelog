@@ -1,3 +1,22 @@
+eta-menu (1.1.0) unstable; urgency=medium
+
+  * Fix grab focus for virtual keyboards
+  * Add margin to window decoration
+  * Disable resize, move and Update user config
+  * Update user pins ui
+  * Add info revealer
+  * Add system favorites file
+  * Add favorites to setup.py
+  * Update window delete_event size control
+  * Update pot file
+  * Update Turkish translations
+  * Add move up, down button to user favorites
+  * Update pot file
+  * Update Turkish translations
+  * Remove window decoration from css
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 17 Sep 2024 18:48:19 +0300
+
 eta-menu (1.0.1) unstable; urgency=medium
 
   * Add child_activated signal to userpins_flowbox
