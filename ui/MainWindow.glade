@@ -172,25 +172,25 @@
           <object class="GtkHeaderBar" id="ui_main_headerbar">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="title" translatable="yes">All Applications</property>
             <child>
-              <object class="GtkButton" id="ui_about_button">
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">center</property>
-                <property name="margin-left">8</property>
-                <property name="margin-right">13</property>
-                <property name="margin-start">8</property>
-                <property name="margin-end">13</property>
-                <signal name="clicked" handler="on_ui_about_button_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">help-about-symbolic</property>
-                  </object>
-                </child>
+                <property name="can-focus">False</property>
+                <property name="tooltip-text" translatable="yes">Favorite Applications</property>
+                <property name="margin-start">41</property>
+                <property name="margin-end">40</property>
+                <property name="icon-name">bookmark-new-symbolic</property>
               </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child>
               <object class="GtkSearchEntry" id="ui_apps_searchentry">
@@ -203,7 +203,7 @@
                 <signal name="search-changed" handler="on_ui_apps_searchentry_search_changed" swapped="no"/>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -211,7 +211,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="margin-right">13</property>
                 <property name="margin-end">13</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_ui_username_button_clicked" swapped="no"/>
@@ -249,7 +248,29 @@
               </object>
               <packing>
                 <property name="pack-type">end</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="ui_about_button">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="halign">center</property>
+                <property name="margin-start">8</property>
+                <property name="margin-end">13</property>
+                <signal name="clicked" handler="on_ui_about_button_clicked" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">help-about-symbolic</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -263,11 +284,6 @@
           <object class="GtkBox" id="ui_main_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-start">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-top">5</property>
-            <property name="margin-bottom">5</property>
-            <property name="spacing">13</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -280,22 +296,85 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">13</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="spacing">5</property>
+                    <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkButton" id="ui_browser_button">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_browser_button_clicked" swapped="no"/>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">13</property>
+                        <property name="homogeneous">True</property>
                         <child>
-                          <object class="GtkImage">
+                          <object class="GtkButton" id="ui_lock_button">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">web-browser-symbolic</property>
-                            <property name="icon_size">3</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_lock_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">system-lock-screen-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="ui_logout_button">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_logout_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">system-log-out-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="ui_poweroff_button">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_poweroff_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">system-shutdown-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -305,19 +384,80 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="ui_cinnamonsettings_button">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_cinnamonsettings_button_clicked" swapped="no"/>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">13</property>
+                        <property name="homogeneous">True</property>
                         <child>
-                          <object class="GtkImage">
+                          <object class="GtkButton" id="ui_filemanager_button">
                             <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">preferences-system-symbolic</property>
-                            <property name="icon_size">3</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_filemanager_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">inode-directory-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="ui_terminal_button">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_terminal_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">utilities-terminal-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="ui_cinnamonsettings_button">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                            <property name="halign">center</property>
+                            <property name="relief">none</property>
+                            <signal name="clicked" handler="on_ui_cinnamonsettings_button_clicked" swapped="no"/>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="icon-name">preferences-system-symbolic</property>
+                                <property name="icon_size">3</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -326,54 +466,11 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="ui_terminal_button">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_terminal_button_clicked" swapped="no"/>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">utilities-terminal-symbolic</property>
-                            <property name="icon_size">3</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="ui_filemanager_button">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_filemanager_button_clicked" swapped="no"/>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">inode-directory-symbolic</property>
-                            <property name="icon_size">3</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="pack-type">end</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -382,100 +479,47 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">13</property>
                     <child>
-                      <object class="GtkButton" id="ui_lock_button">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_lock_button_clicked" swapped="no"/>
+                        <property name="hscrollbar-policy">never</property>
                         <child>
-                          <object class="GtkImage">
+                          <object class="GtkViewport">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="icon-name">system-lock-screen-symbolic</property>
-                            <property name="icon_size">3</property>
+                            <property name="shadow-type">none</property>
+                            <child>
+                              <object class="GtkFlowBox" id="ui_userpins_flowbox">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">center</property>
+                                <property name="valign">start</property>
+                                <property name="row-spacing">3</property>
+                                <property name="max-children-per-line">1</property>
+                                <signal name="child-activated" handler="on_ui_userpins_flowbox_child_activated" swapped="no"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="ui_logout_button">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_logout_button_clicked" swapped="no"/>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">system-log-out-symbolic</property>
-                            <property name="icon_size">3</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="ui_poweroff_button">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="relief">none</property>
-                        <signal name="clicked" handler="on_ui_poweroff_button_clicked" swapped="no"/>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">system-shutdown-symbolic</property>
-                            <property name="icon_size">3</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkSeparator">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkFlowBox" id="ui_userpins_flowbox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="row-spacing">3</property>
-                        <property name="max-children-per-line">1</property>
-                        <signal name="child-activated" handler="on_ui_userpins_flowbox_child_activated" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -488,6 +532,17 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -532,7 +587,7 @@
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

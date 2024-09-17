@@ -128,7 +128,7 @@ class MainWindow(object):
             h = geometry.height
 
             width = int(w / 3)
-            height = int(h / 1.45)
+            height = int(h / 1.4)
 
             if self.UserSettings.config_window_remember_size:
                 if self.UserSettings.config_window_width == 0 and self.UserSettings.config_window_height == 0:
@@ -239,12 +239,12 @@ class MainWindow(object):
     def add_user_pinned_app_to_ui(self, app_id, app_name, app_icon_name, app_filename):
         icon = Gtk.Image.new()
         try:
-            app_icon = Gtk.IconTheme.get_default().load_icon(app_icon_name, 32, Gtk.IconLookupFlags.FORCE_SIZE)
+            app_icon = Gtk.IconTheme.get_default().load_icon(app_icon_name, 48, Gtk.IconLookupFlags.FORCE_SIZE)
         except:
             try:
-                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 32, 32)
+                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
             except:
-                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 32,
+                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 48,
                                                                  Gtk.IconLookupFlags.FORCE_SIZE)
         icon.set_from_pixbuf(app_icon)
 
