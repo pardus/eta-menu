@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-12 13:28+0300\n"
-"PO-Revision-Date: 2024-09-12 13:29+0300\n"
+"POT-Creation-Date: 2024-09-17 17:04+0300\n"
+"PO-Revision-Date: 2024-09-17 17:01+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -31,31 +31,43 @@ msgstr "Panele Ekle"
 msgid "Add to Desktop"
 msgstr "Masaüstüne Ekle"
 
-#: ui/MainWindow.glade:493
+#: ui/MainWindow.glade:175
+msgid "All Applications"
+msgstr "Tüm Uygulamalar"
+
+#: ui/MainWindow.glade:180
+msgid "Favorite Applications"
+msgstr "Favori Uygulamalar"
+
+#: ui/MainWindow.glade:238
 msgid "Pardus"
 msgstr "Pardus"
 
-#: ui/MainWindow.glade:520
+#: ui/MainWindow.glade:691
 msgid "ETA Menu."
 msgstr "Eta Menü."
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:523
+#: ui/MainWindow.glade:694
 msgid "translator-credits"
 msgstr "Fatih Altun <fatih.altun@pardus.org.tr>"
 
-#: ui/MainWindow.glade:582
+#: ui/MainWindow.glade:753
 msgid "Remove from Favorites"
 msgstr "Favorilerden Kaldır"
 
-#: src/MainWindow.py:60
+#: src/MainWindow.py:59
 msgid "ETA Menu"
 msgstr "Eta Menü"
 
-#: src/MainWindow.py:64
+#: src/MainWindow.py:63
 msgid "About ETA Menu"
 msgstr "Eta Menü Hakkında"
 
-#: src/MainWindow.py:417
+#: src/MainWindow.py:387
+msgid "{} already in favorite apps."
+msgstr "{} zaten favori uygulamalarınızda."
+
+#: src/MainWindow.py:448
 msgid "Error"
 msgstr "Hata"
