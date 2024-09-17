@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-12 13:28+0300\n"
+"POT-Creation-Date: 2024-09-17 17:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,31 +29,43 @@ msgstr ""
 msgid "Add to Desktop"
 msgstr ""
 
-#: ui/MainWindow.glade:493
+#: ui/MainWindow.glade:175
+msgid "All Applications"
+msgstr ""
+
+#: ui/MainWindow.glade:180
+msgid "Favorite Applications"
+msgstr ""
+
+#: ui/MainWindow.glade:238
 msgid "Pardus"
 msgstr ""
 
-#: ui/MainWindow.glade:520
+#: ui/MainWindow.glade:691
 msgid "ETA Menu."
 msgstr ""
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:523
+#: ui/MainWindow.glade:694
 msgid "translator-credits"
 msgstr ""
 
-#: ui/MainWindow.glade:582
+#: ui/MainWindow.glade:753
 msgid "Remove from Favorites"
 msgstr ""
 
-#: src/MainWindow.py:60
+#: src/MainWindow.py:59
 msgid "ETA Menu"
 msgstr ""
 
-#: src/MainWindow.py:64
+#: src/MainWindow.py:63
 msgid "About ETA Menu"
 msgstr ""
 
-#: src/MainWindow.py:417
+#: src/MainWindow.py:387
+msgid "{} already in favorite apps."
+msgstr ""
+
+#: src/MainWindow.py:448
 msgid "Error"
 msgstr ""
