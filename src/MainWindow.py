@@ -513,12 +513,13 @@ class MainWindow(object):
         subprocess.Popen(["pardus-about"])
 
     def on_ui_main_window_delete_event(self, window, event):
-        current_width, current_height = window.get_size()
-        try:
-            self.UserSettings.write_config(window_width=current_width, window_height=current_height)
-            self.user_settings()
-        except Exception as e:
-            print("{}".format(e))
+        if self.UserSettings.config_window_remember_size:
+            current_width, current_height = window.get_size()
+            try:
+                self.UserSettings.write_config(window_width=current_width, window_height=current_height)
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
 
         self.ui_main_window.hide()
         return True
