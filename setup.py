@@ -58,7 +58,9 @@ data_files = [
                    "data/css/base.css"]),
                  ("/usr/share/icons/hicolor/scalable/apps/",
                   ["data/eta-menu.svg",
-                   "data/eta-menu-panel-symbolic.svg"])
+                   "data/eta-menu-panel-symbolic.svg"]),
+                 ("/etc/eta/eta-menu/",
+                  ["data/favorites.json"])
              ] + create_mo_files()
 
 setup(
