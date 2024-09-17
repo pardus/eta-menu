@@ -128,16 +128,19 @@ class MainWindow(object):
             h = geometry.height
 
             width = int(w / 3)
-            height = int(h / 2)
+            height = int(h / 1.45)
 
-            if self.UserSettings.config_window_width == 0 and self.UserSettings.config_window_height == 0:
-                print("first run without config, so setting the window size as dynamically {} {}".format(width, height))
-                self.ui_main_window.resize(width, height)
-                self.UserSettings.write_config(window_width=width, window_height=height)
-                self.user_settings()
+            if self.UserSettings.config_window_remember_size:
+                if self.UserSettings.config_window_width == 0 and self.UserSettings.config_window_height == 0:
+                    print("first run without config, so setting the window size as dynamically {} {}".format(width, height))
+                    self.ui_main_window.resize(width, height)
+                    self.UserSettings.write_config(window_width=width, window_height=height)
+                    self.user_settings()
+                else:
+                    self.ui_main_window.resize(self.UserSettings.config_window_width,
+                                               self.UserSettings.config_window_height)
             else:
-                self.ui_main_window.resize(self.UserSettings.config_window_width,
-                                           self.UserSettings.config_window_height)
+                self.ui_main_window.resize(width, height)
 
             self.ui_main_window.move(0, h)
         except Exception as e:

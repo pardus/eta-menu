@@ -24,10 +24,12 @@ class UserSettings(object):
         self.user_config_file = Path.joinpath(self.user_config_dir, Path("settings.ini"))
 
         # window configs
+        self.config_window_remember_size = None
         self.config_window_width = None
         self.config_window_height = None
 
         # window defaults
+        self.default_window_remember_size = False
         self.default_window_width = 0
         self.default_window_height = 0
 
@@ -40,8 +42,10 @@ class UserSettings(object):
             self.create_default_pins()
 
     def create_default_config(self, force=False):
-        self.config["WINDOW"] = {"window_width": self.default_window_width,
-                                 "window_height": self.default_window_height}
+        self.config["WINDOW"] = {
+            "window_remember_size": self.default_window_remember_size,
+            "window_width": self.default_window_width,
+            "window_height": self.default_window_height}
 
         if not Path.is_file(self.user_config_file) or force:
             if self.create_dir(self.user_config_dir):
@@ -51,12 +55,14 @@ class UserSettings(object):
     def read_config(self):
         try:
             self.config.read(self.user_config_file)
+            self.config_window_remember_size = self.config.getboolean("WINDOW", "window_remember_size")
             self.config_window_width = self.config.getint("WINDOW", "window_width")
             self.config_window_height = self.config.getint("WINDOW", "window_height")
         except Exception as e:
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
             # if not read; try to create defaults
+            self.config_window_remember_size = self.default_window_remember_size
             self.config_window_width = self.default_window_width
             self.config_window_height = self.default_window_height
             try:
@@ -64,13 +70,16 @@ class UserSettings(object):
             except Exception as e:
                 print("self.create_default_config(force=True) : {}".format(e))
 
-    def write_config(self, window_width="", window_height=""):
+    def write_config(self, window_remember_size="", window_width="", window_height=""):
+        if window_remember_size == "":
+            window_remember_size = self.config_window_remember_size
         if window_width == "":
             window_width = self.config_window_width
         if window_height == "":
             window_height = self.config_window_height
 
         self.config["WINDOW"] = {
+            "window_remember_size": window_remember_size,
             "window_width": window_width,
             'window_height': window_height
         }
