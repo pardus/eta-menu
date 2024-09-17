@@ -93,6 +93,9 @@ class MainWindow(object):
         self.ui_about_dialog = self.GtkBuilder.get_object("ui_about_dialog")
         self.ui_about_button = self.GtkBuilder.get_object("ui_about_button")
 
+        self.ui_info_revealer = self.GtkBuilder.get_object("ui_info_revealer")
+        self.ui_revealerinfo_label = self.GtkBuilder.get_object("ui_revealerinfo_label")
+
         self.ui_apps_searchentry = self.GtkBuilder.get_object("ui_apps_searchentry")
         self.ui_apps_scrolledwindow = self.GtkBuilder.get_object("ui_apps_scrolledwindow")
         self.ui_username_label = self.GtkBuilder.get_object("ui_username_label")
@@ -112,6 +115,7 @@ class MainWindow(object):
         self.trigger_in_progress = False
         self.monitoring_id = None
         self.right_clicked_app = None
+        self.info_revealer_id = None
 
     def user_settings(self):
         self.UserSettings = UserSettings()
@@ -366,12 +370,22 @@ class MainWindow(object):
                 or search in app["keywords"].lower()):
             return True
 
+    def close_info_revealer(self):
+        if self.ui_info_revealer.get_reveal_child():
+            self.ui_info_revealer.set_reveal_child(False)
+        if self.info_revealer_id is not None:
+            GLib.source_remove(self.info_revealer_id)
+            self.info_revealer_id = None
+
     def on_ui_add_to_userpins_button_clicked(self, button):
         for row in self.ui_userpins_flowbox:
             if self.right_clicked_app["id"] == row.get_children()[0].name["id"]:
                 print("{} already in pinned apps".format(self.right_clicked_app["id"]))
                 self.ui_apps_popover.popdown()
                 self.ui_apps_flowbox.unselect_all()
+                self.ui_info_revealer.set_reveal_child(True)
+                self.ui_revealerinfo_label.set_label(_("{} already in favorite apps.").format(self.right_clicked_app["name"]))
+                self.info_revealer_id = GLib.timeout_add_seconds(3, self.close_info_revealer)
                 return
 
         self.add_user_pinned_app_to_ui(self.right_clicked_app["id"], self.right_clicked_app["name"],
