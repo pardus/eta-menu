@@ -8,8 +8,8 @@ Created on Thu Jul 25 14:53:13 2024
 
 import configparser
 import json
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 import gi
 
@@ -40,9 +40,6 @@ class UserSettings(object):
 
         if not Path.is_dir(self.user_config_dir):
             self.create_dir(self.user_config_dir)
-
-        if not Path.is_file(self.user_favorites_file):
-            self.create_default_pins()
 
     def create_default_config(self, force=False):
         self.config["WINDOW"] = {
@@ -94,6 +91,7 @@ class UserSettings(object):
         return False
 
     def add_user_pinned_app(self, app_id):
+        self.create_default_pins()
         user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
@@ -106,6 +104,7 @@ class UserSettings(object):
         new_cf.flush()
 
     def remove_user_pinned_app(self, app_id):
+        self.create_default_pins()
         user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
@@ -117,24 +116,28 @@ class UserSettings(object):
         new_cf.flush()
 
     def move_up_user_pinned_app(self, item):
+        self.create_default_pins()
         user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
         index = user_pins["apps"].index(item)
         if index > 0:
-            user_pins["apps"][index], user_pins["apps"][index - 1] = user_pins["apps"][index - 1], user_pins["apps"][index]
+            user_pins["apps"][index], user_pins["apps"][index - 1] = user_pins["apps"][index - 1], user_pins["apps"][
+                index]
 
             new_cf = open(self.user_favorites_file, "w")
             new_cf.write(json.dumps(user_pins, indent=4))
             new_cf.flush()
 
     def move_down_user_pinned_app(self, item):
+        self.create_default_pins()
         user_pins_file = open(self.user_favorites_file, "r")
         user_pins = json.load(user_pins_file)
 
         index = user_pins["apps"].index(item)
         if index < len(user_pins["apps"]) - 1:
-            user_pins["apps"][index], user_pins["apps"][index + 1] = user_pins["apps"][index + 1], user_pins["apps"][index]
+            user_pins["apps"][index], user_pins["apps"][index + 1] = user_pins["apps"][index + 1], user_pins["apps"][
+                index]
 
             new_cf = open(self.user_favorites_file, "w")
             new_cf.write(json.dumps(user_pins, indent=4))
@@ -145,12 +148,31 @@ class UserSettings(object):
         if Path.is_file(self.user_favorites_file):
             user_pins_file = open(self.user_favorites_file, "r")
             user_pins = json.load(user_pins_file)
+        elif Path.is_file(self.system_favorites_file):
+            system_pins_file = open(self.system_favorites_file, "r")
+            user_pins = json.load(system_pins_file)
         else:
-            if Path.is_file(self.system_favorites_file):
-                shutil.copy2(self.system_favorites_file, self.user_favorites_file)
+            self.create_default_pins()
+            if Path.is_file(self.user_favorites_file):
                 user_pins_file = open(self.user_favorites_file, "r")
                 user_pins = json.load(user_pins_file)
         return user_pins
+
+    def create_default_pins(self):
+        if not Path.is_file(self.user_favorites_file):
+            if Path.is_file(self.system_favorites_file):
+                shutil.copy2(self.system_favorites_file, self.user_favorites_file)
+            else:
+                default_pins = {
+                    "apps": [
+                        "google-chrome.desktop",
+                        "tr.org.pardus.pen.desktop",
+                        "tr.org.pardus.eta-cinnamon-greeter.desktop"
+                    ]
+                }
+                new_cf = open(self.user_favorites_file, "w")
+                new_cf.write(json.dumps(default_pins, indent=4))
+                new_cf.flush()
 
     def create_dir(self, dir_path):
         try:
@@ -159,18 +181,3 @@ class UserSettings(object):
         except:
             print("{} : {}".format("mkdir error", dir_path))
             return False
-
-    def create_default_pins(self):
-        if Path.is_file(self.system_favorites_file):
-            shutil.copy2(self.system_favorites_file, self.user_favorites_file)
-        else:
-            default_pins = {
-                "apps": [
-                    "google-chrome.desktop",
-                    "tr.org.pardus.pen.desktop",
-                    "tr.org.pardus.eta-cinnamon-greeter.desktop"
-                ]
-            }
-            new_cf = open(self.user_favorites_file, "w")
-            new_cf.write(json.dumps(default_pins, indent=4))
-            new_cf.flush()
