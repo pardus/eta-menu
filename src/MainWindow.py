@@ -126,6 +126,20 @@ class MainWindow(object):
         self.UserSettings.create_default_config()
         self.UserSettings.read_config()
 
+    def control_args(self):
+        if "quit" in self.Application.args.keys():
+            print("args: quit app")
+            if self.ui_about_dialog.is_visible():
+                self.ui_about_dialog.hide()
+            self.ui_main_window.get_application().quit()
+        elif "restore" in self.Application.args.keys():
+            print("args: restoring default settings")
+            self.UserSettings.remove_user_config_dir()
+            self.user_settings()
+            for row in self.ui_userpins_flowbox:
+                GLib.idle_add(self.ui_userpins_flowbox.remove, row)
+            GLib.idle_add(self.create_user_pinned_apps_from_file)
+
     def control_display(self):
         print("in control_display")
         try:
@@ -570,12 +584,13 @@ class MainWindow(object):
         self.ui_main_window.get_application().quit()
 
     def on_ui_main_window_focus_out_event(self, window, event):
-        current_width, current_height = window.get_size()
-        try:
-            self.UserSettings.write_config(window_width=current_width, window_height=current_height)
-            self.user_settings()
-        except Exception as e:
-            print("{}".format(e))
+        if self.UserSettings.config_window_remember_size:
+            current_width, current_height = window.get_size()
+            try:
+                self.UserSettings.write_config(window_width=current_width, window_height=current_height)
+                self.user_settings()
+            except Exception as e:
+                print("{}".format(e))
 
         self.ui_main_window.hide()
         return True

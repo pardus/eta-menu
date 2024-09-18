@@ -31,6 +31,24 @@ class Application(Gtk.Application):
             None,
         )
 
+        self.add_main_option(
+            "quit",
+            ord("q"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Quit from application",
+            None,
+        )
+
+        self.add_main_option(
+            "restore",
+            ord("r"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Restore default settings",
+            None,
+        )
+
     def do_activate(self):
         # We only allow a single window and raise any existing ones
         if not self.window:
@@ -38,6 +56,7 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
+            self.window.control_args()
             if self.window.ui_main_window.is_visible():
                 self.window.ui_main_window.set_visible(False)
             else:

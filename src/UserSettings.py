@@ -181,3 +181,6 @@ class UserSettings(object):
         except:
             print("{} : {}".format("mkdir error", dir_path))
             return False
+
+    def remove_user_config_dir(self):
+        shutil.rmtree(self.user_config_dir)
