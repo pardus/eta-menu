@@ -291,13 +291,14 @@ class MainWindow(object):
             app_id = app.get_id()
             app_name = app.get_name()
             executable = app.get_executable()
-            nodisplay = app.get_nodisplay()
+            # nodisplay = app.get_nodisplay()
+            should_show = app.should_show()
             icon_name = app.get_string('Icon')
             description = app.get_description() or app.get_generic_name() or app.get_name()
             filename = app.get_filename()
             keywords = " ".join(app.get_keywords())
             categories = app.get_categories() if app.get_categories() else ""
-            if executable and not nodisplay:
+            if executable and should_show:
                 apps.append(
                     {"id": app_id, "name": app_name, "icon_name": icon_name, "description": description,
                      "filename": filename, "keywords": keywords, "executable": executable,
