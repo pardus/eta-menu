@@ -142,13 +142,22 @@ class MainWindow(object):
             if self.ui_about_dialog.is_visible():
                 self.ui_about_dialog.hide()
             self.ui_main_window.get_application().quit()
-        elif "restore" in self.Application.args.keys():
+        elif "defaults" in self.Application.args.keys():
             print("args: restoring default settings")
             self.UserSettings.remove_user_config_dir()
             self.user_settings()
+            self.set_apps_flowbox_ui()
             for row in self.ui_userpins_flowbox:
                 GLib.idle_add(self.ui_userpins_flowbox.remove, row)
             GLib.idle_add(self.create_user_pinned_apps_from_file)
+        elif "refresh" in self.Application.args.keys():
+            print("args: refresh")
+            self.user_settings()
+            self.set_apps_flowbox_ui()
+            for row in self.ui_userpins_flowbox:
+                GLib.idle_add(self.ui_userpins_flowbox.remove, row)
+            GLib.idle_add(self.create_user_pinned_apps_from_file)
+            GLib.idle_add(self.set_desktop_apps)
 
     def control_display(self):
         print("in control_display")

@@ -41,11 +41,20 @@ class Application(Gtk.Application):
         )
 
         self.add_main_option(
-            "restore",
-            ord("r"),
+            "defaults",
+            ord("d"),
             GLib.OptionFlags(0),
             GLib.OptionArg(0),
             "Restore default settings",
+            None,
+        )
+
+        self.add_main_option(
+            "refresh",
+            ord("r"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Refresh",
             None,
         )
 
