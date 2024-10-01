@@ -650,7 +650,7 @@
                             <property name="column-spacing">3</property>
                             <property name="row-spacing">3</property>
                             <property name="min-children-per-line">5</property>
-                            <property name="max-children-per-line">50</property>
+                            <property name="max-children-per-line">5</property>
                             <signal name="child-activated" handler="on_ui_apps_flowbox_child_activated" swapped="no"/>
                           </object>
                         </child>

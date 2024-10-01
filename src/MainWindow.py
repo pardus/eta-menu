@@ -50,6 +50,8 @@ class MainWindow(object):
 
         self.user_settings()
 
+        self.set_apps_flowbox_ui()
+
         # self.control_display()
 
         self.create_user_pinned_apps_from_file()
@@ -126,6 +128,14 @@ class MainWindow(object):
         self.UserSettings.create_default_config()
         self.UserSettings.read_config()
 
+    def set_apps_flowbox_ui(self):
+        if self.UserSettings.config_window_remember_size:
+            self.ui_apps_flowbox.set_min_children_per_line(1)
+            self.ui_apps_flowbox.set_max_children_per_line(1000)
+        else:
+            self.ui_apps_flowbox.set_min_children_per_line(self.UserSettings.config_apps_count)
+            self.ui_apps_flowbox.set_max_children_per_line(self.UserSettings.config_apps_count)
+
     def control_args(self):
         if "quit" in self.Application.args.keys():
             print("args: quit app")
@@ -162,7 +172,7 @@ class MainWindow(object):
                     self.ui_main_window.resize(self.UserSettings.config_window_width,
                                                self.UserSettings.config_window_height)
             else:
-                self.ui_main_window.resize(width, height)
+                self.ui_main_window.resize(1, height)
 
             self.ui_main_window.move(0, h)
         except Exception as e:

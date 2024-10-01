@@ -31,10 +31,16 @@ class UserSettings(object):
         self.config_window_width = None
         self.config_window_height = None
 
+        # apps flowbox configs
+        self.config_apps_count = None
+
         # window defaults
         self.default_window_remember_size = False
         self.default_window_width = 0
         self.default_window_height = 0
+
+        # apps flowbox defaults
+        self.default_apps_count = 5
 
         self.config = configparser.ConfigParser(strict=False)
 
@@ -47,6 +53,9 @@ class UserSettings(object):
             "window_width": self.default_window_width,
             "window_height": self.default_window_height}
 
+        self.config["APPS"] = {
+            "count": self.default_apps_count}
+
         if not Path.is_file(self.user_config_file) or force:
             if self.create_dir(self.user_config_dir):
                 with open(self.user_config_file, "w") as cf:
@@ -58,6 +67,7 @@ class UserSettings(object):
             self.config_window_remember_size = self.config.getboolean("WINDOW", "window_remember_size")
             self.config_window_width = self.config.getint("WINDOW", "window_width")
             self.config_window_height = self.config.getint("WINDOW", "window_height")
+            self.config_apps_count = self.config.getint("APPS", "count")
         except Exception as e:
             print("{}".format(e))
             print("user config read error ! Trying create defaults")
@@ -65,23 +75,30 @@ class UserSettings(object):
             self.config_window_remember_size = self.default_window_remember_size
             self.config_window_width = self.default_window_width
             self.config_window_height = self.default_window_height
+            self.config_apps_count = self.default_apps_count
             try:
                 self.create_default_config(force=True)
             except Exception as e:
                 print("self.create_default_config(force=True) : {}".format(e))
 
-    def write_config(self, window_remember_size="", window_width="", window_height=""):
+    def write_config(self, window_remember_size="", window_width="", window_height="", apps_count=""):
         if window_remember_size == "":
             window_remember_size = self.config_window_remember_size
         if window_width == "":
             window_width = self.config_window_width
         if window_height == "":
             window_height = self.config_window_height
+        if apps_count == "":
+            apps_count = self.config_apps_count
 
         self.config["WINDOW"] = {
             "window_remember_size": window_remember_size,
             "window_width": window_width,
             'window_height': window_height
+        }
+
+        self.config["APPS"] = {
+            "count": apps_count
         }
 
         if self.create_dir(self.user_config_dir):
