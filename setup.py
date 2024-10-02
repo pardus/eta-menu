@@ -51,7 +51,8 @@ data_files = [
                  ("/usr/share/pardus/eta-menu/data",
                   ["data/eta-menu.svg",
                    "data/eta-menu-panel-symbolic.svg",
-                   "data/tr.org.pardus.eta-menu.desktop"]),
+                   "data/tr.org.pardus.eta-menu.desktop",
+                   "data/tr.org.pardus.eta-menu-autostart.desktop"]),
                  ("/usr/share/pardus/eta-menu/data/css",
                   ["data/css/adw.css",
                    "data/css/all.css",
@@ -60,7 +61,9 @@ data_files = [
                   ["data/eta-menu.svg",
                    "data/eta-menu-panel-symbolic.svg"]),
                  ("/etc/eta/eta-menu/",
-                  ["data/favorites.json"])
+                  ["data/favorites.json"]),
+                 ("/etc/xdg/autostart/",
+                  ["data/tr.org.pardus.eta-menu-autostart.desktop"])
              ] + create_mo_files()
 
 setup(
