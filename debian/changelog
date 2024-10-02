@@ -1,3 +1,12 @@
+eta-menu (1.1.2) unstable; urgency=medium
+
+  * Update desktop app show control
+  * Add apps per line config
+  * Add refresh arg
+  * Add autostart
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Wed, 02 Oct 2024 12:34:15 +0300
+
 eta-menu (1.1.1) unstable; urgency=medium
 
   * Update user, system favorites control
