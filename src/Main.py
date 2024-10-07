@@ -76,7 +76,8 @@ class Application(Gtk.Application):
                 self.window.ui_userpins_flowbox.unselect_all()
                 # self.window.control_display()
                 self.window.ui_main_window.present()
-                self.window.focus_search()
+                # self.window.focus_search()
+                self.window.unfocus_search()
 
     def do_command_line(self, command_line):
         options = command_line.get_options_dict()

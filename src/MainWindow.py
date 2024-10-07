@@ -45,7 +45,8 @@ class MainWindow(object):
 
         self.set_css()
         self.set_desktop_apps()
-        self.focus_search()
+        # self.focus_search()
+        self.unfocus_search()
         self.set_username()
 
         self.user_settings()
@@ -219,6 +220,9 @@ class MainWindow(object):
     def focus_search(self):
         GLib.idle_add(self.ui_about_button.grab_focus)
         GLib.idle_add(self.ui_apps_searchentry.grab_focus)
+
+    def unfocus_search(self):
+        GLib.idle_add(self.ui_about_button.grab_focus)
 
     def start_monitoring(self):
         data_dirs = []
@@ -546,6 +550,14 @@ class MainWindow(object):
         if event.keyval == Gdk.KEY_Escape:
             self.ui_main_window.hide()
             return True
+        else:
+            if not self.ui_apps_searchentry.has_focus():
+                if event.string.isdigit() or event.string.isalpha():
+                    self.ui_apps_searchentry.get_buffer().delete_text(0, -1)
+                    self.ui_apps_searchentry.grab_focus()
+                    self.ui_apps_searchentry.get_buffer().insert_text(1, event.string, 1)
+                    self.ui_apps_searchentry.set_position(2)
+                    return True
 
     def on_ui_apps_searchentry_search_changed(self, search_entry):
         self.ui_apps_flowbox.invalidate_filter()
