@@ -1,3 +1,10 @@
+eta-menu (1.1.3) unstable; urgency=medium
+
+  * Add unfocus search entry and key listener for search
+  * Add unfocus search on window hide
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Mon, 07 Oct 2024 18:26:02 +0300
+
 eta-menu (1.1.2) unstable; urgency=medium
 
   * Update desktop app show control
