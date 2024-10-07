@@ -607,6 +607,8 @@ class MainWindow(object):
             except Exception as e:
                 print("{}".format(e))
 
+        self.unfocus_search()
+
         self.ui_main_window.hide()
         return True
 
@@ -623,6 +625,8 @@ class MainWindow(object):
                 self.user_settings()
             except Exception as e:
                 print("{}".format(e))
+
+        self.unfocus_search()
 
         self.ui_main_window.hide()
         return True
