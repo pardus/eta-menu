@@ -90,11 +90,14 @@ class MainWindow(object):
             self.ui_main_window.set_visible(True)
             self.ui_main_window.show_all()
 
+        self.set_initial_hide_widgets()
+
     def define_components(self):
         self.ui_main_window = self.GtkBuilder.get_object("ui_main_window")
         self.ui_main_window.set_skip_taskbar_hint(True)
         self.ui_about_dialog = self.GtkBuilder.get_object("ui_about_dialog")
         self.ui_about_button = self.GtkBuilder.get_object("ui_about_button")
+        self.ui_remove_app_button = self.GtkBuilder.get_object("ui_remove_app_button")
 
         self.ui_info_revealer = self.GtkBuilder.get_object("ui_info_revealer")
         self.ui_revealerinfo_label = self.GtkBuilder.get_object("ui_revealerinfo_label")
@@ -129,6 +132,16 @@ class MainWindow(object):
         self.UserSettings.create_default_config()
         self.UserSettings.read_config()
 
+    def set_initial_hide_widgets(self):
+        pardus_software_app = "tr.org.pardus.software.desktop"
+        found = True
+        try:
+            Gio.DesktopAppInfo.new(pardus_software_app)
+        except Exception as e:
+            found = False
+            print("{} not found. {}".format(pardus_software_app, e))
+        self.ui_remove_app_button.set_visible(found)
+
     def set_apps_flowbox_ui(self):
         if self.UserSettings.config_window_remember_size:
             self.ui_apps_flowbox.set_min_children_per_line(1)
@@ -155,6 +168,7 @@ class MainWindow(object):
             print("args: refresh")
             self.user_settings()
             self.set_apps_flowbox_ui()
+            self.set_initial_hide_widgets()
             for row in self.ui_userpins_flowbox:
                 GLib.idle_add(self.ui_userpins_flowbox.remove, row)
             GLib.idle_add(self.create_user_pinned_apps_from_file)
@@ -597,6 +611,10 @@ class MainWindow(object):
     def on_ui_about_button_clicked(self, button):
         self.ui_main_window.hide()
         subprocess.Popen(["pardus-about"])
+
+    def on_ui_remove_app_button_clicked(self, button):
+        self.ui_main_window.hide()
+        subprocess.Popen(["pardus-software", "--remove", self.right_clicked_app["id"]])
 
     def on_ui_main_window_delete_event(self, window, event):
         if self.UserSettings.config_window_remember_size:
