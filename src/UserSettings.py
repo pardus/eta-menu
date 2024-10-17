@@ -184,6 +184,7 @@ class UserSettings(object):
                     "apps": [
                         "google-chrome.desktop",
                         "tr.org.pardus.pen.desktop",
+                        "tr.org.pardus.eta-screen-cover.desktop",
                         "tr.org.pardus.eta-cinnamon-greeter.desktop"
                     ]
                 }
