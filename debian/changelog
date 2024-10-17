@@ -1,3 +1,12 @@
+eta-menu (1.1.4) unstable; urgency=medium
+
+  * Add uninstall app option to menu
+  * Update pot file
+  * Update Turkish translations
+  * Add eta-screen-cover to default pins
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Thu, 17 Oct 2024 19:18:54 +0300
+
 eta-menu (1.1.3) unstable; urgency=medium
 
   * Add unfocus search entry and key listener for search
