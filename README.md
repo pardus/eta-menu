@@ -39,3 +39,4 @@ gbp buildpackage --git-export-dir=/tmp/build/eta-menu -us -uc
 ### **Screenshots**
 
 ![eta-menu 1](screenshots/eta-menu-1.png)
+![eta-menu 2](screenshots/eta-menu-2.png)
