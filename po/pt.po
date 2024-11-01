@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-08 17:30+0300\n"
+"PO-Revision-Date: 2024-10-31 22:14+0000\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.5\n"
+
+#: ui/MainWindow.glade:45
+msgid "Add to Favorites"
+msgstr "Adicionar aos favoritos"
+
+#: ui/MainWindow.glade:90
+msgid "Add to Panel"
+msgstr "Adicionar ao painel"
+
+#: ui/MainWindow.glade:135
+msgid "Add to Desktop"
+msgstr "Adicionar à área de trabalho"
+
+#: ui/MainWindow.glade:180
+msgid "Uninstall App"
+msgstr "Desinstalar aplicação"
+
+#: ui/MainWindow.glade:220
+msgid "All Applications"
+msgstr "Todas as aplicações"
+
+#: ui/MainWindow.glade:225
+msgid "Favorite Applications"
+msgstr "Aplicações favoritas"
+
+#: ui/MainWindow.glade:283
+msgid "Pardus"
+msgstr "Pardus"
+
+#: ui/MainWindow.glade:736
+msgid "ETA Menu."
+msgstr "Menu ETA."
+
+#. Name Surname <example@examplemail.com>
+#: ui/MainWindow.glade:739
+msgid "translator-credits"
+msgstr "Hugo Carvalho <hugokarvalho@hotmail.com>"
+
+#: ui/MainWindow.glade:798
+msgid "Remove from Favorites"
+msgstr "Remover dos favoritos"
+
+#: ui/MainWindow.glade:837
+msgid "Move"
+msgstr "Mover"
+
+#: src/MainWindow.py:62
+msgid "ETA Menu"
+msgstr "Menu ETA"
+
+#: src/MainWindow.py:66
+msgid "About ETA Menu"
+msgstr "Acerca do Menu ETA"
+
+#: src/MainWindow.py:442
+msgid "{} already in favorite apps."
+msgstr "{} já está nas suas aplicações favoritas."
+
+#: src/MainWindow.py:539
+msgid "Error"
+msgstr "Erro"
