@@ -296,18 +296,12 @@ class MainWindow(object):
             self.add_user_pinned_app_to_ui(app_id, app_name, app_icon_name, app_filename)
 
     def add_user_pinned_app_to_ui(self, app_id, app_name, app_icon_name, app_filename):
-        icon = Gtk.Image.new()
-        try:
-            app_icon = Gtk.IconTheme.get_default().load_icon(app_icon_name, 48, Gtk.IconLookupFlags.FORCE_SIZE)
-        except:
-            try:
-                app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
-            except:
-                app_icon_name = "image-missing"
-                app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 48,
-                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
-
-        icon = Gtk.Image.new_from_icon_name(app_icon_name, Gtk.IconSize.BUTTON)
+        if os.path.isfile(app_icon_name):
+            px = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
+            icon = Gtk.Image.new()
+            icon.set_from_pixbuf(px)
+        else:
+            icon = Gtk.Image.new_from_icon_name(app_icon_name, Gtk.IconSize.BUTTON)
         icon.set_pixel_size(48)
 
         box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -316,7 +310,7 @@ class MainWindow(object):
         listbox = Gtk.ListBox.new()
         listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         listbox.connect("button-release-event", self.on_userpins_listbox_released, listbox)
-        listbox.name = {"id": app_id, "name": app_name, "icon_name": app_icon_name, "icon": app_icon,
+        listbox.name = {"id": app_id, "name": app_name, "icon_name": app_icon_name,
                         "filename": app_filename}
         listbox.get_style_context().add_class("eta-menu-listbox")
         GLib.idle_add(listbox.add, box)
@@ -356,18 +350,12 @@ class MainWindow(object):
         for desktop_app in desktop_apps:
 
             app_name = desktop_app["name"]
-            try:
-                app_icon = Gtk.IconTheme.get_default().load_icon(desktop_app["icon_name"], 64,
-                                                                 Gtk.IconLookupFlags.FORCE_SIZE)
-            except:
-                try:
-                    app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
-                except:
-                    desktop_app["icon_name"] = "image-missing"
-                    app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 64,
-                                                                     Gtk.IconLookupFlags.FORCE_SIZE)
-
-            icon = Gtk.Image.new_from_icon_name(desktop_app["icon_name"], Gtk.IconSize.BUTTON)
+            if os.path.isfile(desktop_app["icon_name"]):
+                px = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
+                icon = Gtk.Image.new()
+                icon.set_from_pixbuf(px)
+            else:
+                icon = Gtk.Image.new_from_icon_name(desktop_app["icon_name"], Gtk.IconSize.BUTTON)
             icon.set_pixel_size(64)
 
             label = Gtk.Label.new()
@@ -384,7 +372,7 @@ class MainWindow(object):
             listbox.set_selection_mode(Gtk.SelectionMode.NONE)
             listbox.connect("button-release-event", self.on_apps_listbox_released, listbox)
             listbox.name = {"id": desktop_app["id"], "name": desktop_app["name"], "icon_name": desktop_app["icon_name"],
-                            "icon": app_icon, "filename": desktop_app["filename"],
+                            "filename": desktop_app["filename"],
                             "description": desktop_app["description"],
                             "keywords": desktop_app["keywords"],
                             "executable": desktop_app["executable"],
