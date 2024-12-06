@@ -303,9 +303,12 @@ class MainWindow(object):
             try:
                 app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
             except:
+                app_icon_name = "image-missing"
                 app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 48,
                                                                  Gtk.IconLookupFlags.FORCE_SIZE)
-        icon.set_from_pixbuf(app_icon)
+
+        icon = Gtk.Image.new_from_icon_name(app_icon_name, Gtk.IconSize.BUTTON)
+        icon.set_pixel_size(48)
 
         box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
         box.pack_start(icon, False, True, 0)
@@ -353,7 +356,6 @@ class MainWindow(object):
         for desktop_app in desktop_apps:
 
             app_name = desktop_app["name"]
-            icon = Gtk.Image.new()
             try:
                 app_icon = Gtk.IconTheme.get_default().load_icon(desktop_app["icon_name"], 64,
                                                                  Gtk.IconLookupFlags.FORCE_SIZE)
@@ -361,9 +363,12 @@ class MainWindow(object):
                 try:
                     app_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
                 except:
+                    desktop_app["icon_name"] = "image-missing"
                     app_icon = Gtk.IconTheme.get_default().load_icon("image-missing", 64,
                                                                      Gtk.IconLookupFlags.FORCE_SIZE)
-            icon.set_from_pixbuf(app_icon)
+
+            icon = Gtk.Image.new_from_icon_name(desktop_app["icon_name"], Gtk.IconSize.BUTTON)
+            icon.set_pixel_size(64)
 
             label = Gtk.Label.new()
             label.set_text(app_name)
