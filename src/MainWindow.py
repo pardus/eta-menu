@@ -290,7 +290,7 @@ class MainWindow(object):
                 continue
             app_id = app.get_id()
             app_name = app.get_name()
-            app_icon_name = app.get_string('Icon')
+            app_icon_name = "{}".format(app.get_string('Icon'))
             app_filename = app.get_filename()
 
             self.add_user_pinned_app_to_ui(app_id, app_name, app_icon_name, app_filename)
