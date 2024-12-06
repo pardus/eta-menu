@@ -327,7 +327,7 @@ class MainWindow(object):
             executable = app.get_executable()
             # nodisplay = app.get_nodisplay()
             should_show = app.should_show()
-            icon_name = app.get_string('Icon')
+            icon_name = "{}".format(app.get_string('Icon'))
             description = app.get_description() or app.get_generic_name() or app.get_name()
             filename = app.get_filename()
             keywords = " ".join(app.get_keywords())
