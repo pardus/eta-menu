@@ -1,3 +1,27 @@
+eta-menu (1.1.5) unstable; urgency=medium
+
+  [ Fatih Altun ]
+  * Update README.md
+  * Add screenshot
+
+  [ Hugo Carvalho ]
+  * Add Portuguese translations
+  * Add Portuguese translations
+  * Add Portuguese translations
+
+  [ Fatih Altun ]
+  * Update copyright
+
+  [ Ali Riza KESKIN ]
+  * app icon bad quality fix
+  * Fix missing icons
+
+  [ Fatih Altun ]
+  * Fix get icon_name
+  * Fix user_pinned app get icon_name
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Tue, 10 Dec 2024 08:57:24 +0300
+
 eta-menu (1.1.4) unstable; urgency=medium
 
   * Add uninstall app option to menu
