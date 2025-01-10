@@ -185,7 +185,8 @@ class UserSettings(object):
                         "google-chrome.desktop",
                         "tr.org.pardus.pen.desktop",
                         "tr.org.pardus.eta-screen-cover.desktop",
-                        "tr.org.pardus.eta-cinnamon-greeter.desktop"
+                        "tr.org.pardus.eta-cinnamon-greeter.desktop",
+                        "ebalogin.desktop"
                     ]
                 }
                 new_cf = open(self.user_favorites_file, "w")
