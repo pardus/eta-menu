@@ -15,12 +15,15 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib
 
 
+import time
+
 class Application(Gtk.Application):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, application_id="tr.org.pardus.eta-menu",
                          flags=Gio.ApplicationFlags(8), **kwargs)
         self.window = None
         GLib.set_prgname("tr.org.pardus.eta-menu")
+        self.time = 0
 
         self.add_main_option(
             "tray",
@@ -65,6 +68,9 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
+            if time.time() - self.time < 1:
+                return
+            self.time = time.time()
             self.window.control_args()
             if self.window.ui_main_window.is_visible():
                 self.window.ui_main_window.set_visible(False)
