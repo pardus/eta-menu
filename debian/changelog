@@ -1,3 +1,10 @@
+eta-menu (1.1.7) unstable; urgency=medium
+
+  [ Ali Riza KESKIN ]
+  * fix bounce click issue for vestel board
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Wed, 15 Jan 2025 15:15:37 +0300
+
 eta-menu (1.1.6) unstable; urgency=medium
 
   * Add ebalogin to favorites
