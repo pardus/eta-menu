@@ -186,7 +186,9 @@ class UserSettings(object):
                         "tr.org.pardus.pen.desktop",
                         "tr.org.pardus.eta-screen-cover.desktop",
                         "tr.org.pardus.eta-cinnamon-greeter.desktop",
-                        "ebalogin.desktop"
+                        "tr.org.pardus.software.desktop",
+                        "ebalogin.desktop",
+                        "blueman-manager.desktop"
                     ]
                 }
                 new_cf = open(self.user_favorites_file, "w")
