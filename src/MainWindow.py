@@ -574,6 +574,40 @@ class MainWindow(object):
                     self.ui_apps_searchentry.set_position(2)
                     return True
 
+    def on_ui_apps_flowbox_selected_children_changed(self, flowbox):
+        print("on_ui_apps_flowbox_selected_children_changed")
+        def scroll_to_child(flowbox, child):
+            scrolled_window = flowbox.get_parent().get_parent()
+            vadjustment = scrolled_window.get_vadjustment()
+            x, y = child.translate_coordinates(flowbox, 0, 0)
+            view_start = vadjustment.get_value()
+            view_end = view_start + vadjustment.get_page_size()
+            if y < view_start:
+                vadjustment.set_value(y)
+            elif (y + child.get_allocated_height()) > view_end:
+                vadjustment.set_value(y + child.get_allocated_height() - vadjustment.get_page_size())
+        selected = flowbox.get_selected_children()
+        if selected:
+            flowbox.select_child(selected[0])
+            GLib.idle_add(scroll_to_child, flowbox, selected[0])
+
+    def on_ui_userpins_flowbox_selected_children_changed(self, flowbox):
+        print("on_ui_userpins_flowbox_selected_children_changed")
+        def scroll_to_child(flowbox, child):
+            scrolled_window = flowbox.get_parent().get_parent()
+            vadjustment = scrolled_window.get_vadjustment()
+            x, y = child.translate_coordinates(flowbox, 0, 0)
+            view_start = vadjustment.get_value()
+            view_end = view_start + vadjustment.get_page_size()
+            if y < view_start:
+                vadjustment.set_value(y)
+            elif (y + child.get_allocated_height()) > view_end:
+                vadjustment.set_value(y + child.get_allocated_height() - vadjustment.get_page_size())
+        selected = flowbox.get_selected_children()
+        if selected:
+            flowbox.select_child(selected[0])
+            GLib.idle_add(scroll_to_child, flowbox, selected[0])
+
     def on_ui_apps_searchentry_search_changed(self, search_entry):
         self.ui_apps_flowbox.invalidate_filter()
 
