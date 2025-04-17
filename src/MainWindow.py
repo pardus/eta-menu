@@ -296,12 +296,16 @@ class MainWindow(object):
             self.add_user_pinned_app_to_ui(app_id, app_name, app_icon_name, app_filename)
 
     def add_user_pinned_app_to_ui(self, app_id, app_name, app_icon_name, app_filename):
-        if os.path.isfile(app_icon_name):
-            px = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
-            icon = Gtk.Image.new()
-            icon.set_from_pixbuf(px)
-        else:
-            icon = Gtk.Image.new_from_icon_name(app_icon_name, Gtk.IconSize.BUTTON)
+        try:
+            if os.path.isfile(app_icon_name):
+                px = GdkPixbuf.Pixbuf.new_from_file_at_size(app_icon_name, 48, 48)
+                icon = Gtk.Image.new()
+                icon.set_from_pixbuf(px)
+            else:
+                icon = Gtk.Image.new_from_icon_name(app_icon_name, Gtk.IconSize.BUTTON)
+        except Exception as e:
+            icon = Gtk.Image.new_from_icon_name("image-missing-symbolic", Gtk.IconSize.BUTTON)
+            print("Exception on add_user_pinned_app_to_ui: {}, app: {} {}".format(e, app_id, app_icon_name))
         icon.set_pixel_size(48)
 
         box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
@@ -350,12 +354,16 @@ class MainWindow(object):
         for desktop_app in desktop_apps:
 
             app_name = desktop_app["name"]
-            if os.path.isfile(desktop_app["icon_name"]):
-                px = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
-                icon = Gtk.Image.new()
-                icon.set_from_pixbuf(px)
-            else:
-                icon = Gtk.Image.new_from_icon_name(desktop_app["icon_name"], Gtk.IconSize.BUTTON)
+            try:
+                if os.path.isfile(desktop_app["icon_name"]):
+                    px = GdkPixbuf.Pixbuf.new_from_file_at_size(desktop_app["icon_name"], 64, 64)
+                    icon = Gtk.Image.new()
+                    icon.set_from_pixbuf(px)
+                else:
+                    icon = Gtk.Image.new_from_icon_name(desktop_app["icon_name"], Gtk.IconSize.BUTTON)
+            except Exception as e:
+                icon = Gtk.Image.new_from_icon_name("image-missing-symbolic", Gtk.IconSize.BUTTON)
+                print("Exception on set_desktop_apps: {}, app: {}".format(e, desktop_app))
             icon.set_pixel_size(64)
 
             label = Gtk.Label.new()
