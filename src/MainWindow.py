@@ -268,7 +268,8 @@ class MainWindow(object):
     def on_app_info_changed(self, file_monitor, file, other_file, event_type):
         print("App Info Changed: {} {}".format(file.get_path(), event_type))
 
-        if event_type in [Gio.FileMonitorEvent.CHANGES_DONE_HINT, Gio.FileMonitorEvent.DELETED]:
+        if event_type in [Gio.FileMonitorEvent.CHANGES_DONE_HINT, Gio.FileMonitorEvent.DELETED,
+                          Gio.FileMonitorEvent.ATTRIBUTE_CHANGED]:
             if "{}".format(file.get_path()).endswith(".desktop"):
                 print("App Info Trigger: {} {}".format(file.get_path(), event_type))
                 if not self.trigger_in_progress:
