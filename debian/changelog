@@ -1,3 +1,12 @@
+eta-menu (1.1.9) unstable; urgency=medium
+
+  * Add exception for corrupted and wrong image files
+  * Add scroll to child on flowbox
+  * Update can-focus as True for flowbox
+  * Add attribute changed control to monitoring
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 25 Apr 2025 08:26:41 +0300
+
 eta-menu (1.1.8) unstable; urgency=medium
 
   * Update default favorite apps
