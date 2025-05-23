@@ -1,3 +1,13 @@
+eta-menu (1.2.0) unstable; urgency=medium
+
+  * Add PowerOff Dialog for power_off button
+  * Update po/files
+  * Update pot file
+  * Update Turkish translations
+  * Fix typo
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 23 May 2025 15:46:32 +0300
+
 eta-menu (1.1.9) unstable; urgency=medium
 
   * Add exception for corrupted and wrong image files
