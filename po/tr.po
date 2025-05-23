@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Fatih Altun <fatih.altun@pardus.org.tr>, 2024.
+# Fatih Altun <fatih.altun@pardus.org.tr>, 2024-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 17:30+0300\n"
-"PO-Revision-Date: 2024-10-08 17:30+0300\n"
+"POT-Creation-Date: 2025-05-23 15:23+0300\n"
+"PO-Revision-Date: 2025-05-23 15:24+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -47,35 +47,59 @@ msgstr "Favori Uygulamalar"
 msgid "Pardus"
 msgstr "Pardus"
 
-#: ui/MainWindow.glade:736
+#: ui/MainWindow.glade:738
 msgid "ETA Menu."
 msgstr "Eta Menü."
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:739
+#: ui/MainWindow.glade:741
 msgid "translator-credits"
 msgstr "Fatih Altun <fatih.altun@pardus.org.tr>"
 
-#: ui/MainWindow.glade:798
+#: ui/MainWindow.glade:800
 msgid "Remove from Favorites"
 msgstr "Favorilerden Kaldır"
 
-#: ui/MainWindow.glade:837
+#: ui/MainWindow.glade:839
 msgid "Move"
 msgstr "Taşı"
 
-#: src/MainWindow.py:62
+#: src/MainWindow.py:63
 msgid "ETA Menu"
 msgstr "Eta Menü"
 
-#: src/MainWindow.py:66
+#: src/MainWindow.py:67
 msgid "About ETA Menu"
 msgstr "Eta Menü Hakkında"
 
-#: src/MainWindow.py:442
+#: src/MainWindow.py:446
 msgid "{} already in favorite apps."
 msgstr "{} zaten favori uygulamalarınızda."
 
-#: src/MainWindow.py:539
+#: src/MainWindow.py:543
 msgid "Error"
 msgstr "Hata"
+
+#: src/MainWindow.py:627
+msgid "Session"
+msgstr "Oturum"
+
+#: src/MainWindow.py:627
+msgid "Shut down the system now?"
+msgstr "Sistemi şimdi kapatılsın mı?"
+
+#: src/Utils.py:142
+msgid "OK"
+msgstr "Tamam"
+
+#: src/Utils.py:159
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/Utils.py:160
+msgid "Reboot"
+msgstr "Yeniden Başlat"
+
+#: src/Utils.py:161
+msgid "Power Off"
+msgstr "Kapat"
