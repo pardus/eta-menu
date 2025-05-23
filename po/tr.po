@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-23 15:23+0300\n"
-"PO-Revision-Date: 2025-05-23 15:24+0300\n"
+"PO-Revision-Date: 2025-05-23 15:46+0300\n"
 "Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -86,7 +86,7 @@ msgstr "Oturum"
 
 #: src/MainWindow.py:627
 msgid "Shut down the system now?"
-msgstr "Sistemi şimdi kapatılsın mı?"
+msgstr "Sistem şimdi kapatılsın mı?"
 
 #: src/Utils.py:142
 msgid "OK"
