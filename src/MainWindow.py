@@ -18,6 +18,7 @@ gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import Gtk, GObject, Gio, GLib, GdkPixbuf, Gdk
 from UserSettings import UserSettings
 from Utils import ErrorDialog
+from Utils import PowerOffDialog
 
 import locale
 from locale import gettext as _
@@ -622,7 +623,8 @@ class MainWindow(object):
 
     def on_ui_poweroff_button_clicked(self, button):
         self.ui_main_window.hide()
-        subprocess.Popen(["cinnamon-session-quit", "--power-off"])
+        # subprocess.Popen(["cinnamon-session-quit", "--power-off"])
+        PowerOffDialog(_("Session"), _("Shut down the system now?"))
 
     def on_ui_browser_button_clicked(self, button):
         self.ui_main_window.hide()

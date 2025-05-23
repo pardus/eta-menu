@@ -133,11 +133,42 @@ class Dialog(Gtk.MessageDialog):
     def show(self):
         try:
             response = self.run()
+            return response
         finally:
             self.destroy()
-
 
 def ErrorDialog(*args):
     dialog = Dialog(Gtk.MessageType.ERROR, Gtk.ButtonsType.NONE, *args)
     dialog.add_button(_("OK"), Gtk.ResponseType.OK)
     return dialog.show()
+
+def on_shutdown_clicked():
+    os.system('dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 '
+              '"org.freedesktop.login1.Manager.PowerOff" boolean:true')
+
+def on_restart_clicked():
+    os.system('dbus-send --system --print-reply --dest=org.freedesktop.login1 /org/freedesktop/login1 '
+              '"org.freedesktop.login1.Manager.Reboot" boolean:true')
+
+def on_cancel_clicked():
+    print("on_cancel_clicked")
+
+def PowerOffDialog(*args):
+    dialog = Dialog(Gtk.MessageType.ERROR, Gtk.ButtonsType.NONE, *args)
+
+    dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+    dialog.add_button(_("Reboot"), Gtk.ResponseType.YES)
+    dialog.add_button(_("Power Off"), Gtk.ResponseType.APPLY)
+
+    button = dialog.get_children()[0].get_children()[1].get_children()[0].get_children()[2]
+    print(button)
+    button.get_style_context().add_class("destructive-action")
+
+    response = dialog.show()
+
+    if response == Gtk.ResponseType.YES:
+        on_restart_clicked()
+    elif response == Gtk.ResponseType.APPLY:
+        on_shutdown_clicked()
+    elif response == Gtk.ResponseType.CANCEL:
+        on_cancel_clicked()
