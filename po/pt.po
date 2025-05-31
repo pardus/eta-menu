@@ -1,15 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024-2025.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 17:30+0300\n"
-"PO-Revision-Date: 2024-10-31 22:14+0000\n"
+"POT-Creation-Date: 2025-05-23 15:23+0300\n"
+"PO-Revision-Date: 2025-05-31 17:44+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
 "Language: pt\n"
@@ -17,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: ui/MainWindow.glade:45
 msgid "Add to Favorites"
@@ -47,35 +46,59 @@ msgstr "Aplicações favoritas"
 msgid "Pardus"
 msgstr "Pardus"
 
-#: ui/MainWindow.glade:736
+#: ui/MainWindow.glade:738
 msgid "ETA Menu."
 msgstr "Menu ETA."
 
 #. Name Surname <example@examplemail.com>
-#: ui/MainWindow.glade:739
+#: ui/MainWindow.glade:741
 msgid "translator-credits"
 msgstr "Hugo Carvalho <hugokarvalho@hotmail.com>"
 
-#: ui/MainWindow.glade:798
+#: ui/MainWindow.glade:800
 msgid "Remove from Favorites"
 msgstr "Remover dos favoritos"
 
-#: ui/MainWindow.glade:837
+#: ui/MainWindow.glade:839
 msgid "Move"
 msgstr "Mover"
 
-#: src/MainWindow.py:62
+#: src/MainWindow.py:63
 msgid "ETA Menu"
 msgstr "Menu ETA"
 
-#: src/MainWindow.py:66
+#: src/MainWindow.py:67
 msgid "About ETA Menu"
 msgstr "Acerca do Menu ETA"
 
-#: src/MainWindow.py:442
+#: src/MainWindow.py:446
 msgid "{} already in favorite apps."
 msgstr "{} já está nas suas aplicações favoritas."
 
-#: src/MainWindow.py:539
+#: src/MainWindow.py:543
 msgid "Error"
 msgstr "Erro"
+
+#: src/MainWindow.py:627
+msgid "Session"
+msgstr "Sessão"
+
+#: src/MainWindow.py:627
+msgid "Shut down the system now?"
+msgstr "Desligar o sistema agora?"
+
+#: src/Utils.py:142
+msgid "OK"
+msgstr "OK"
+
+#: src/Utils.py:159
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/Utils.py:160
+msgid "Reboot"
+msgstr "Reiniciar"
+
+#: src/Utils.py:161
+msgid "Power Off"
+msgstr "Desligar"
