@@ -1,0 +1,7 @@
+{
+"uuid": "menu@etap.org.tr",
+"name": "Eta Menu",
+"description": "Custom Menu for ETAP",
+"icon": "eta-menu",
+"max-instances": -1
+}

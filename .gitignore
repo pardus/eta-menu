@@ -154,3 +154,11 @@ cython_debug/
 
 *.glade~
 *.glade#
+
+# Debian files
+debian/eta-menu
+debian/.debhelper
+debian/eta-menu.substvars
+debian/files
+src/__version__
+.pybuild

@@ -63,7 +63,11 @@ data_files = [
                  ("/etc/eta/eta-menu/",
                   ["data/favorites.json"]),
                  ("/etc/xdg/autostart/",
-                  ["data/tr.org.pardus.eta-menu-autostart.desktop"])
+                  ["data/tr.org.pardus.eta-menu-autostart.desktop"]),
+                  ("/usr/share/cinnamon/applets/menu@etap.org.tr",
+                  ["applet/applet.js",
+                  "applet/metadata.json",
+                  "applet/settings-schema.json"])
              ] + create_mo_files()
 
 setup(
