@@ -20,7 +20,7 @@ class EtaMenu extends Applet.TextIconApplet {
     }
 
     on_applet_clicked(event) {
-        GLib.spawn_command_line_async('eta-menu show');
+        GLib.spawn_command_line_async('eta-menu');
     }
 
 }
