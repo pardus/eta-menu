@@ -60,6 +60,19 @@ data_files = [
                  ("/usr/share/icons/hicolor/scalable/apps/",
                   ["data/eta-menu.svg",
                    "data/eta-menu-panel-symbolic.svg"]),
+                   
+                 ("/usr/share/cinnamon/applets/eta-menu@karahan/",
+                  ["data/eta-menu@karahan/metadata.json"]),
+                  
+                  ("/usr/share/cinnamon/applets/eta-menu@karahan/",
+                  ["data/eta-menu@karahan/settings-schema.json"]),
+                  
+                     ("/usr/share/cinnamon/applets/eta-menu@karahan/",
+                  ["data/eta-menu@karahan/applet.js"]),
+               
+                     ("/usr/share/applications/",
+                  ["data/eta-menu.desktop"]),
+              
                  ("/etc/eta/eta-menu/",
                   ["data/favorites.json"]),
                  ("/etc/xdg/autostart/",
