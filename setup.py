@@ -25,6 +25,18 @@ def create_mo_files():
                        ["po/" + po.split(".po")[0] + "/LC_MESSAGES/eta-menu.mo"]))
     return mo
 
+def create_applet_mo_files():
+    podir = "applet/po"
+    mo = []
+    for po in os.listdir(podir):
+        if po.endswith(".po"):
+            os.makedirs("{}/{}/LC_MESSAGES".format(podir, po.split(".po")[0]), exist_ok=True)
+            mo_file = "{}/{}/LC_MESSAGES/{}".format(podir, po.split(".po")[0], "menu@etap.org.tr.mo")
+            msgfmt_cmd = 'msgfmt {} -o {}'.format(podir + "/" + po, mo_file)
+            subprocess.call(msgfmt_cmd, shell=True)
+            mo.append(("/usr/share/locale/" + po.split(".po")[0] + "/LC_MESSAGES",
+                       [podir + "/" + po.split(".po")[0] + "/LC_MESSAGES/menu@etap.org.tr.mo"]))
+    return mo
 
 changelog = "debian/changelog"
 if os.path.exists(changelog):
@@ -68,7 +80,7 @@ data_files = [
                   ["applet/applet.js",
                   "applet/metadata.json",
                   "applet/settings-schema.json"])
-             ] + create_mo_files()
+             ] + create_mo_files() + create_applet_mo_files()
 
 setup(
     name="eta-menu",

@@ -1,0 +1,68 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Fatih Altun <fatih.altun@pardus.org.tr>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-23 13:37+0000\n"
+"PO-Revision-Date: 2025-12-23 16:41+0300\n"
+"Last-Translator: Fatih Altun <fatih.altun@pardus.org.tr>\n"
+"Language-Team: Turkish <dev@pardus.org.tr>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Gtranslator 48.0\n"
+
+#. metadata.json->name
+msgid "Eta Menu"
+msgstr "Eta Menü"
+
+#. metadata.json->description
+msgid "Custom Menu for ETAP"
+msgstr "ETAP için Özel Menü"
+
+#. settings-schema.json->general->description
+msgid "General"
+msgstr "Genel"
+
+#. settings-schema.json->appletLabel->description
+msgid "Menu label"
+msgstr "Menü etiketi"
+
+#. settings-schema.json->appletLabel->tooltip
+msgid "Text shown on the panel"
+msgstr "Panelde gösterilen metin"
+
+#. settings-schema.json->appletIcon->description
+msgid "Menu icon"
+msgstr "Menü simgesi"
+
+#. settings-schema.json->appletIcon->tooltip
+msgid "Icon name or file path"
+msgstr "Simge adı veya dosya yolu"
+
+#. settings-schema.json->iconSize->description
+msgid "Icon size"
+msgstr "İkon boyutu"
+
+#. settings-schema.json->iconSize->tooltip
+msgid "Panel icon size (px)"
+msgstr "Panel simgesi boyutu (piksel)"
+
+#. settings-schema.json->keyboard->description
+msgid "Keyboard"
+msgstr "Klavye"
+
+#. settings-schema.json->keyOpen->description
+msgid "Open menu"
+msgstr "Menüyü aç"
+
+#. settings-schema.json->keyOpen->tooltip
+msgid "Runs eta-menu"
+msgstr "eta-menu çalıştırır"
