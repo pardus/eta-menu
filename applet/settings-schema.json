@@ -1,2 +1,42 @@
 {
+  "general": {
+    "type": "section",
+    "description": "General"
+  },
+
+  "appletLabel": {
+    "type": "entry",
+    "default": "Pardus",
+    "description": "Menu label",
+    "tooltip": "Text shown on the panel"
+  },
+
+  "appletIcon": {
+    "type": "iconfilechooser",
+    "default": "eta-start",
+    "description": "Menu icon",
+    "tooltip": "Icon name or file path"
+  },
+
+  "iconSize": {
+    "type": "spinbutton",
+    "default": 48,
+    "min": 16,
+    "max": 64,
+    "step": 1,
+    "description": "Icon size",
+    "tooltip": "Panel icon size (px)"
+  },
+
+  "keyboard": {
+    "type": "section",
+    "description": "Keyboard"
+  },
+
+  "keyOpen": {
+    "type": "keybinding",
+    "default": "Super_L::Super_R",
+    "description": "Open menu",
+    "tooltip": "Runs eta-menu"
+  }
 }
