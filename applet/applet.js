@@ -33,16 +33,8 @@ class EtaMenu extends Applet.TextIconApplet {
             null
         );
 
-        this.settings.bindProperty(
-            Settings.BindingDirection.IN,
-            "keyOpen",
-            "keyOpen",
-            this._onKeybindingChanged.bind(this),
-            null
-        );
-
         this._applyAppearance();
-        this._onKeybindingChanged();
+        this._registerHotkeys();
     }
 
     on_applet_clicked(event) {
@@ -71,24 +63,38 @@ class EtaMenu extends Applet.TextIconApplet {
         }
     }
 
-    _onKeybindingChanged() {
-        try {
-            Main.keybindingManager.removeHotKey("eta-menu-hotkey");
-        } catch (e) {}
+    _registerHotkeys() {
+        this._unregisterHotkeys();
 
-        if (this.keyOpen && this.keyOpen.length > 0) {
+        // Hardcoded: Super_L and Super_R
+        try {
             Main.keybindingManager.addHotKey(
-                "eta-menu-hotkey",
-                this.keyOpen,
+                "eta-menu-hotkey-left",
+                "Super_L",
                 () => this._openMenu()
             );
+        } catch (e) {
+            global.logError(e);
+        }
+
+        try {
+            Main.keybindingManager.addHotKey(
+                "eta-menu-hotkey-right",
+                "Super_R",
+                () => this._openMenu()
+            );
+        } catch (e) {
+            global.logError(e);
         }
     }
 
+    _unregisterHotkeys() {
+        try { Main.keybindingManager.removeHotKey("eta-menu-hotkey-left"); } catch (e) {}
+        try { Main.keybindingManager.removeHotKey("eta-menu-hotkey-right"); } catch (e) {}
+    }
+
     on_applet_removed_from_panel() {
-        try {
-            Main.keybindingManager.removeHotKey("eta-menu-hotkey");
-        } catch (e) {}
+        this._unregisterHotkeys();
 
         if (this.settings) {
             this.settings.finalize();

@@ -26,17 +26,5 @@
     "step": 1,
     "description": "Icon size",
     "tooltip": "Panel icon size (px)"
-  },
-
-  "keyboard": {
-    "type": "section",
-    "description": "Keyboard"
-  },
-
-  "keyOpen": {
-    "type": "keybinding",
-    "default": "Super_L::Super_R",
-    "description": "Open menu",
-    "tooltip": "Runs eta-menu"
   }
 }
