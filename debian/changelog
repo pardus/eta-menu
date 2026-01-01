@@ -1,4 +1,4 @@
-eta-menu (1.2.0) unstable; urgency=medium
+eta-menu (1.2.1) unstable; urgency=medium
 
   * Add PowerOff Dialog for power_off button
   * Update po/files
