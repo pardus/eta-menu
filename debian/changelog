@@ -1,3 +1,21 @@
+eta-menu (2.0.0) unstable; urgency=medium
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ Ali Riza KESKIN ]
+  * add deticated cinnamon applet
+
+  [ Fatih Altun ]
+  * Fix eta-menu spawn command
+  * Use cinnamon-session-quit for power-off
+  * Update applet as more customizable
+  * Add applet translates
+  * Update eta-menu applet hotkey as hardcoded super_l-r
+  * Use eta-shutdown for power-off
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Thu, 29 Jan 2026 11:59:07 +0300
+
 eta-menu (1.2.0) unstable; urgency=medium
 
   * Add PowerOff Dialog for power_off button
