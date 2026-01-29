@@ -623,7 +623,7 @@ class MainWindow(object):
 
     def on_ui_poweroff_button_clicked(self, button):
         self.ui_main_window.hide()
-        subprocess.Popen(["cinnamon-session-quit", "--power-off"])
+        subprocess.Popen(["eta-shutdown", "--menu"])
         # PowerOffDialog(_("Session"), _("Shut down the system now?"))
 
     def on_ui_browser_button_clicked(self, button):
