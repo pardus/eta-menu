@@ -6,7 +6,7 @@
 
   "appletLabel": {
     "type": "entry",
-    "default": "Pardus",
+    "default": " P A R D U S ",
     "description": "Menu label",
     "tooltip": "Text shown on the panel"
   },
