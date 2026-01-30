@@ -1,3 +1,9 @@
+eta-menu (2.0.1) unstable; urgency=medium
+
+  * Update default menu label
+
+ -- Fatih Altun <fatih.altun@pardus.org.tr>  Fri, 30 Jan 2026 17:30:40 +0300
+
 eta-menu (2.0.0) unstable; urgency=medium
 
   [ Hugo Carvalho ]
