@@ -27,6 +27,13 @@ Run application
 ```bash
 python3 ~/eta-menu/src/Main.py
 ```
+## Platform Note
+
+This application is intended to run on Debian-based Linux distributions.
+The dependency installation steps use `apt`, which is not available on macOS or Windows.
+
+Development and testing should be performed on a Debian-based Linux environment
+(e.g. Pardus, Ubuntu).
 
 ### **Build deb package**
 
