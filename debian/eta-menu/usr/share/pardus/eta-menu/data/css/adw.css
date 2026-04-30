@@ -1,0 +1,23 @@
+@import url("base.css");
+
+.eta-menu-listbox{
+    border-radius:8px;
+    margin:0px;
+    padding:0px;
+}
+
+.eta-menu-listbox row:hover, row:selected{
+    border-radius:8px;
+}
+
+.eta-menu-flowbox flowboxchild{
+    border-radius:8px;
+}
+
+.eta-menu-frame row{
+    margin:0px;
+}
+
+.eta-menu-frame > border{
+    border-radius: 8px;
+}

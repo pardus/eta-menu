@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=Eta Menu
+Comment=Eta Menu Ayarları
+Exec=cinnamon-settings applets eta-menu@karahan
+Icon=eta-menu
+Categories=Settings;
+

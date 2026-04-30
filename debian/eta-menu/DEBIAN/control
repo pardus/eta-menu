@@ -1,0 +1,11 @@
+Package: eta-menu
+Version: 9.2.1
+Architecture: all
+Maintainer: Fatih Altun <fatih.altun@pardus.org.tr>
+Installed-Size: 209
+Depends: python3-gi, python3:any, gir1.2-ayatanaappindicator3-0.1, gir1.2-glib-2.0, gir1.2-gtk-3.0
+Section: x11
+Priority: optional
+Homepage: https://github.com/pardus/eta-menu
+Description: ETA Menu.
+ ETA Menu application.

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=ETA Menu
+Name[pt]=Menu ETA
+Comment=ETA Menu
+Comment[pt]=Menu ETA
+Exec=eta-menu --tray
+Icon=eta-menu
+Terminal=false
+Type=Application
+Categories=GTK;Utility;
+StartupNotify=true
+Keywords=menu;
