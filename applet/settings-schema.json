@@ -13,7 +13,7 @@
 
   "appletIcon": {
     "type": "iconfilechooser",
-    "default": "eta-start",
+    "default": "eta-menu",
     "description": "Menu icon",
     "tooltip": "Icon name or file path"
   },

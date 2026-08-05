@@ -49,7 +49,7 @@ class EtaMenu extends Applet.TextIconApplet {
         const lbl = (this.appletLabel || " P A R D U S ");
         this.set_applet_label(lbl);
 
-        const icon = (this.appletIcon && this.appletIcon.length > 0) ? this.appletIcon : "eta-start";
+        const icon = (this.appletIcon && this.appletIcon.length > 0) ? this.appletIcon : "eta-menu";
 
         if (icon.indexOf("/") !== -1) {
             this.set_applet_icon_path(icon);
