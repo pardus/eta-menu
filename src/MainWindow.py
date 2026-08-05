@@ -178,8 +178,24 @@ class MainWindow(object):
     def control_display(self):
         print("in control_display")
         try:
-            display = Gdk.Display.get_default()
-            monitor = display.get_primary_monitor()
+            def get_active_monitor():
+                display = Gdk.Display.get_default()
+                monitor = display.get_primary_monitor()
+                if monitor:
+                    print("monitor from get_primary_monitor")
+                    return monitor
+                device_manager = display.get_device_manager()
+                pointer = device_manager.get_client_pointer()
+                if pointer:
+                    screen, x, y = pointer.get_position()
+                    monitor_num = screen.get_monitor_at_point(x, y)
+                    if monitor_num >= 0:
+                        print("monitor from pointer position")
+                        return display.get_monitor(monitor_num)
+                print("monitor from get_monitor(0)")
+                return display.get_monitor(0)
+
+            monitor = get_active_monitor()
             geometry = monitor.get_geometry()
             w = geometry.width
             h = geometry.height
@@ -199,7 +215,13 @@ class MainWindow(object):
             else:
                 self.ui_main_window.resize(1, height)
 
-            self.ui_main_window.move(0, h)
+            workarea = monitor.get_workarea()
+            panel_top = workarea.y > 0
+            if panel_top:
+                self.ui_main_window.move(0, workarea.y)
+            else:
+                self.ui_main_window.move(0, workarea.height)
+
         except Exception as e:
             print("control_display: {}".format(e))
 
