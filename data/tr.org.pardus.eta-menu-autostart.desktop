@@ -1,12 +1,11 @@
 [Desktop Entry]
+Version=1.0
+Type=Application
 Name=ETA Menu
-Name[pt]=Menu ETA
-Comment=ETA Menu
-Comment[pt]=Menu ETA
-Exec=eta-menu --tray
+Comment=App Launcher
+Exec=systemd-run --user /usr/bin/eta-menu --tray
 Icon=eta-menu
 Terminal=false
-Type=Application
 Categories=GTK;Utility;
-StartupNotify=true
-Keywords=menu;
+StartupNotify=false
+NoDisplay=true
