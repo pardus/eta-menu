@@ -68,6 +68,8 @@ data_files = [
                   ["data/css/adw.css",
                    "data/css/all.css",
                    "data/css/base.css"]),
+                 ("/usr/share/applications",
+                  ["data/tr.org.pardus.eta-menu.desktop"]),
                  ("/usr/share/icons/hicolor/scalable/apps/",
                   ["data/eta-menu.svg"]),
                  ("/etc/eta/eta-menu/",

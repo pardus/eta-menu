@@ -2,6 +2,8 @@ const Applet = imports.ui.applet;
 const Main = imports.ui.main;
 const Settings = imports.ui.settings;
 const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
+const Util = imports.misc.util;
 
 class EtaMenu extends Applet.TextIconApplet {
     constructor(metadata, orientation, panel_height, instance_id) {
@@ -42,7 +44,18 @@ class EtaMenu extends Applet.TextIconApplet {
     }
 
     _openMenu() {
-        GLib.spawn_command_line_async("eta-menu");
+        try {
+            let appInfo = Gio.DesktopAppInfo.new("tr.org.pardus.eta-menu.desktop");
+            if (appInfo) {
+                let context = global.create_app_launch_context(0, -1);
+                appInfo.launch([], context);
+                return;
+            }
+        } catch (e) {
+            global.logError(e);
+        }
+
+        Util.spawnCommandLine("systemd-run --user eta-menu");
     }
 
     _applyAppearance() {
