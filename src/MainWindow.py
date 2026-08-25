@@ -178,24 +178,101 @@ class MainWindow(object):
     def control_display(self):
         print("in control_display")
         try:
-            def get_active_monitor():
+            def get_panel_monitor():
                 display = Gdk.Display.get_default()
+                n_monitors = display.get_n_monitors()
+
+                try:
+                    # Check whether the Cinnamon settings schema is installed.
+                    schema_source = Gio.SettingsSchemaSource.get_default()
+                    schema = schema_source.lookup("org.cinnamon", True)
+
+                    if schema is None:
+                        raise Exception("Cinnamon settings schema is not installed")
+
+                    # Read the Cinnamon panel configuration.
+                    # Format: panelID:monitor:position
+                    settings = Gio.Settings.new_full(schema, None, None)
+                    panels = settings.get_strv("panels-enabled")
+
+                    if not panels:
+                        raise Exception("panels-enabled is empty")
+
+                    panel = panels[0]
+                    parts = panel.split(":")
+
+                    if len(parts) < 3:
+                        raise Exception("invalid panels-enabled format: {}".format(panel))
+
+                    monitor_num = int(parts[1])
+                    panel_position = parts[2].lower()
+
+                    if monitor_num < 0 or monitor_num >= n_monitors:
+                        raise Exception("invalid panel monitor number: {}".format(monitor_num))
+
+                    print("monitor from Cinnamon panel configuration: {}, ""position: {}".format(monitor_num, panel_position))
+
+                    return display.get_monitor(monitor_num), panel_position
+
+                except Exception as e:
+                    print("Cinnamon panel monitor detection failed: {}".format(e))
+                    print("falling back to workarea detection")
+
+                # Find the monitor where the panel is located by comparing
+                # the monitor geometry with its available workarea.
+                for i in range(n_monitors):
+                    monitor = display.get_monitor(i)
+                    geometry = monitor.get_geometry()
+                    workarea = monitor.get_workarea()
+
+                    if (workarea.x != geometry.x or
+                            workarea.y != geometry.y or
+                            workarea.width != geometry.width or
+                            workarea.height != geometry.height):
+                        print("monitor with panel found")
+                        return monitor, None
+
+                # Fall back to the primary monitor if no panel monitor is found.
                 monitor = display.get_primary_monitor()
                 if monitor:
                     print("monitor from get_primary_monitor")
-                    return monitor
-                device_manager = display.get_device_manager()
-                pointer = device_manager.get_client_pointer()
-                if pointer:
-                    screen, x, y = pointer.get_position()
-                    monitor_num = screen.get_monitor_at_point(x, y)
-                    if monitor_num >= 0:
-                        print("monitor from pointer position")
-                        return display.get_monitor(monitor_num)
-                print("monitor from get_monitor(0)")
-                return display.get_monitor(0)
+                    return monitor, None
 
-            monitor = get_active_monitor()
+                print("monitor from get_monitor(0)")
+                return display.get_monitor(0), None
+
+            def get_menu_panel_side():
+                try:
+                    schema_source = Gio.SettingsSchemaSource.get_default()
+                    schema = schema_source.lookup("org.cinnamon", True)
+
+                    if schema is None:
+                        raise Exception("Cinnamon settings schema is not installed")
+
+                    settings = Gio.Settings.new_full(schema, None, None)
+                    applets = settings.get_strv("enabled-applets")
+
+                    # Find the menu applet and get its panel side.
+                    for applet in applets:
+                        if "menu@etap.org.tr" in applet:
+                            parts = applet.split(":")
+
+                            if len(parts) >= 3:
+                                panel_side = parts[1].lower()
+
+                                if panel_side in ("left", "right"):
+                                    print("menu applet found on panel side: {}".format(panel_side))
+                                    return panel_side
+
+                    raise Exception("menu applet not found")
+
+                except Exception as e:
+                    print("menu panel side detection failed: {}".format(e))
+                    return None
+
+            monitor, panel_position = get_panel_monitor()
+            menu_panel_side = get_menu_panel_side()
+
             geometry = monitor.get_geometry()
             w = geometry.width
             h = geometry.height
@@ -216,11 +293,29 @@ class MainWindow(object):
                 self.ui_main_window.resize(1, height)
 
             workarea = monitor.get_workarea()
-            panel_top = workarea.y > 0
-            if panel_top:
-                self.ui_main_window.move(0, workarea.y)
+            window_width = self.ui_main_window.get_size()[0]
+
+            # Position the menu on the left or right side of the panel.
+            if menu_panel_side == "right":
+                target_x = workarea.x + workarea.width - window_width
             else:
-                self.ui_main_window.move(0, workarea.height)
+                target_x = workarea.x
+
+            # Position the window based on panel position from GSettings.
+            if panel_position == "top":
+                target_y = workarea.y
+            elif panel_position == "bottom":
+                window_height = self.ui_main_window.get_size()[1]
+                target_y = workarea.y + workarea.height - window_height
+            else:
+                # Fallback check when GSettings position is unavailable.
+                if workarea.y > geometry.y:
+                    target_y = workarea.y
+                else:
+                    window_height = self.ui_main_window.get_size()[1]
+                    target_y = workarea.y + workarea.height - window_height
+
+            self.ui_main_window.move(target_x, target_y)
 
         except Exception as e:
             print("control_display: {}".format(e))
