@@ -769,7 +769,7 @@ class MainWindow(object):
 
     def on_ui_remove_app_button_clicked(self, button):
         self.ui_main_window.hide()
-        subprocess.Popen(["pardus-software", "--remove", self.right_clicked_app["id"]])
+        subprocess.Popen(["pardus-software", "--details", self.right_clicked_app["id"]])
 
     def on_ui_main_window_delete_event(self, window, event):
         if self.UserSettings.config_window_remember_size:
