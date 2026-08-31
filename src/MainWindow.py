@@ -181,64 +181,82 @@ class MainWindow(object):
             def get_panel_monitor():
                 display = Gdk.Display.get_default()
                 n_monitors = display.get_n_monitors()
+                primary = display.get_primary_monitor()
 
+                # Map monitors to match Cinnamon's internal indexing model:
+                # Index 0: Always the primary monitor
+                # Index 1..N: Secondary monitors
+                cinnamon_monitors = []
+                if primary:
+                    cinnamon_monitors.append(primary)
+                for i in range(n_monitors):
+                    mon = display.get_monitor(i)
+                    if mon != primary:
+                        cinnamon_monitors.append(mon)
+
+                # Strategy 1: Detect monitor using Cinnamon GSettings configuration
                 try:
-                    # Check whether the Cinnamon settings schema is installed.
                     schema_source = Gio.SettingsSchemaSource.get_default()
-                    schema = schema_source.lookup("org.cinnamon", True)
+                    schema = schema_source.lookup("org.cinnamon", True) if schema_source else None
 
                     if schema is None:
                         raise Exception("Cinnamon settings schema is not installed")
 
-                    # Read the Cinnamon panel configuration.
-                    # Format: panelID:monitor:position
                     settings = Gio.Settings.new_full(schema, None, None)
                     panels = settings.get_strv("panels-enabled")
 
                     if not panels:
-                        raise Exception("panels-enabled is empty")
+                        raise Exception("panels-enabled GSettings entry is empty")
 
-                    panel = panels[0]
-                    parts = panel.split(":")
-
+                    parts = panels[0].split(":")
                     if len(parts) < 3:
-                        raise Exception("invalid panels-enabled format: {}".format(panel))
+                        raise Exception("Invalid panels-enabled format: {}".format(panels[0]))
 
                     monitor_num = int(parts[1])
                     panel_position = parts[2].lower()
 
-                    if monitor_num < 0 or monitor_num >= n_monitors:
-                        raise Exception("invalid panel monitor number: {}".format(monitor_num))
+                    if monitor_num < 0 or monitor_num >= len(cinnamon_monitors):
+                        raise Exception("Panel monitor index out of bounds: {}".format(monitor_num))
 
-                    print("monitor from Cinnamon panel configuration: {}, ""position: {}".format(monitor_num, panel_position))
+                    print(
+                        "Cinnamon panel monitor found via GSettings (mapped index {}), position: {}".format(monitor_num,
+                                                                                                            panel_position))
 
-                    return display.get_monitor(monitor_num), panel_position
+                    # Return immediately when found via GSettings
+                    return cinnamon_monitors[monitor_num], panel_position
 
                 except Exception as e:
-                    print("Cinnamon panel monitor detection failed: {}".format(e))
-                    print("falling back to workarea detection")
+                    print("Cinnamon panel GSettings detection failed: {}".format(e))
+                    print("Falling back to workarea detection")
 
-                # Find the monitor where the panel is located by comparing
-                # the monitor geometry with its available workarea.
-                for i in range(n_monitors):
-                    monitor = display.get_monitor(i)
-                    geometry = monitor.get_geometry()
-                    workarea = monitor.get_workarea()
+                # Strategy 2: Fallback to physical workarea geometry check
+                for mon in cinnamon_monitors:
+                    geometry = mon.get_geometry()
+                    workarea = mon.get_workarea()
 
                     if (workarea.x != geometry.x or
                             workarea.y != geometry.y or
                             workarea.width != geometry.width or
                             workarea.height != geometry.height):
-                        print("monitor with panel found")
-                        return monitor, None
 
-                # Fall back to the primary monitor if no panel monitor is found.
-                monitor = display.get_primary_monitor()
-                if monitor:
-                    print("monitor from get_primary_monitor")
-                    return monitor, None
+                        # Infer panel position from workarea geometry offsets
+                        panel_position = None
+                        if workarea.y > geometry.y:
+                            panel_position = "top"
+                        elif (workarea.y + workarea.height) < (geometry.y + geometry.height):
+                            panel_position = "bottom"
 
-                print("monitor from get_monitor(0)")
+                        print("Monitor with panel found via workarea detection")
+
+                        # Return immediately when found via workarea
+                        return mon, panel_position
+
+                # Strategy 3: Ultimate fallback to primary or default monitor
+                if primary:
+                    print("Fallback to primary monitor")
+                    return primary, None
+
+                print("Fallback to default monitor get_monitor(0)")
                 return display.get_monitor(0), None
 
             def get_menu_panel_side():
