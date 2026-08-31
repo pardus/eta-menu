@@ -7,5 +7,5 @@ Exec=systemd-run --user /usr/bin/eta-menu
 Icon=eta-menu
 Terminal=false
 Categories=GTK;Utility;
-StartupNotify=true
+StartupNotify=false
 NoDisplay=true
