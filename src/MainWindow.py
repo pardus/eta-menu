@@ -703,14 +703,17 @@ class MainWindow(object):
         if event.keyval == Gdk.KEY_Escape:
             self.ui_main_window.hide()
             return True
-        else:
-            if not self.ui_apps_searchentry.has_focus():
-                if event.string.isdigit() or event.string.isalpha():
-                    self.ui_apps_searchentry.get_buffer().delete_text(0, -1)
-                    self.ui_apps_searchentry.grab_focus()
-                    self.ui_apps_searchentry.get_buffer().insert_text(1, event.string, 1)
-                    self.ui_apps_searchentry.set_position(2)
-                    return True
+
+        if self.ui_apps_searchentry.has_focus():
+            return False
+
+        if event.string and event.string.isalnum():
+            self.ui_apps_searchentry.grab_focus()
+            self.ui_apps_searchentry.set_text(event.string)
+            self.ui_apps_searchentry.set_position(-1)
+            return True
+
+        return False
 
     def on_ui_apps_flowbox_selected_children_changed(self, flowbox):
         print("on_ui_apps_flowbox_selected_children_changed")
