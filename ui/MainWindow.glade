@@ -245,6 +245,8 @@
                 <property name="primary-icon-name">edit-find-symbolic</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
+                <signal name="activate" handler="on_ui_apps_searchentry_activate" swapped="no"/>
+                <signal name="key-press-event" handler="on_ui_apps_searchentry_key_press_event" swapped="no"/>
                 <signal name="search-changed" handler="on_ui_apps_searchentry_search_changed" swapped="no"/>
               </object>
               <packing>

@@ -749,6 +749,65 @@ class MainWindow(object):
     def on_ui_apps_searchentry_search_changed(self, search_entry):
         self.ui_apps_flowbox.invalidate_filter()
 
+        if not search_entry.get_text():
+            self.ui_apps_flowbox.unselect_all()
+            return
+
+        GLib.idle_add(self.select_first_search_result)
+
+    def select_first_search_result(self):
+        self.ui_apps_flowbox.unselect_all()
+
+        for child in self.ui_apps_flowbox:
+            if child.get_child_visible():
+                self.ui_apps_flowbox.select_child(child)
+                break
+
+        return False
+
+    def on_ui_apps_searchentry_activate(self, search_entry):
+        selected = self.ui_apps_flowbox.get_selected_children()
+
+        if not selected:
+            return
+
+        child = selected[0]
+        app = child.get_children()[0].name
+
+        self.ui_apps_flowbox.unselect_all()
+        self.ui_main_window.hide()
+        Gio.DesktopAppInfo.new(app["id"]).launch([], None)
+
+    def on_ui_apps_searchentry_key_press_event(self, widget, event):
+        direction = {
+            Gdk.KEY_Up: -self.UserSettings.config_apps_count,
+            Gdk.KEY_Down: self.UserSettings.config_apps_count,
+            Gdk.KEY_Left: -1,
+            Gdk.KEY_Right: 1,
+        }.get(event.keyval)
+
+        if direction is None:
+            return False
+
+        children = [
+            child for child in self.ui_apps_flowbox
+            if child.get_child_visible()
+        ]
+
+        selected = self.ui_apps_flowbox.get_selected_children()
+
+        if not children:
+            return True
+
+        if not selected:
+            index = 0
+        else:
+            index = children.index(selected[0]) + direction
+            index = max(0, min(index, len(children) - 1))
+
+        self.ui_apps_flowbox.select_child(children[index])
+        return True
+
     def on_ui_lock_button_clicked(self, button):
         self.ui_main_window.hide()
         subprocess.Popen(["cinnamon-screensaver-command", "--lock"])
