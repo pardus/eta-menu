@@ -68,9 +68,12 @@ class Application(Gtk.Application):
             # when the last one is closed the application shuts down
             self.window = MainWindow(self)
         else:
-            if time.time() - self.time < 1:
+            current_time = time.time()
+            if hasattr(self.window, 'last_focus_out_time') and (current_time - self.window.last_focus_out_time < 0.5):
                 return
-            self.time = time.time()
+            if current_time - self.time < 0.5:
+                return
+            self.time = current_time
             self.window.control_args()
             if self.window.ui_main_window.is_visible():
                 self.window.ui_main_window.set_visible(False)

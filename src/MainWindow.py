@@ -9,6 +9,7 @@ import json
 import os
 import signal
 import subprocess
+import time
 
 import gi
 
@@ -820,6 +821,9 @@ class MainWindow(object):
         self.unfocus_search()
 
         self.ui_main_window.hide()
+
+        self.last_focus_out_time = time.time()
+
         return True
 
     def on_ui_main_window_show(self, window):
