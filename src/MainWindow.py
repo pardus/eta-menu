@@ -699,7 +699,7 @@ class MainWindow(object):
         self.ui_apps_popover.popdown()
         self.ui_apps_flowbox.unselect_all()
 
-    def on_ui_main_window_key_release_event(self, widget, event):
+    def on_ui_main_window_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
             self.ui_main_window.hide()
             return True
