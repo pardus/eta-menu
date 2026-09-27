@@ -2,6 +2,7 @@ const Applet = imports.ui.applet;
 const Main = imports.ui.main;
 const Settings = imports.ui.settings;
 const GLib = imports.gi.GLib;
+const St = imports.gi.St;
 
 class EtaMenu extends Applet.TextIconApplet {
     constructor(metadata, orientation, panel_height, instance_id) {
@@ -41,8 +42,18 @@ class EtaMenu extends Applet.TextIconApplet {
         this._openMenu();
     }
 
+    on_orientation_changed(orientation) {
+        this._orientation = orientation;
+    }
+
     _openMenu() {
-        GLib.spawn_command_line_async("eta-menu");
+        let isTop = false;
+        if (this._orientation !== undefined) {
+            isTop = (this._orientation === St.Side.TOP);
+        } else if (this.panel) {
+            isTop = !this.panel.bottom;
+        }
+        GLib.spawn_command_line_async(isTop ? "eta-menu --top" : "eta-menu --bottom");
     }
 
     _applyAppearance() {
