@@ -24,6 +24,7 @@ class Application(Gtk.Application):
         self.window = None
         GLib.set_prgname("tr.org.pardus.eta-menu")
         self.time = 0
+        self.args = {}
 
         self.add_main_option(
             "tray",
@@ -61,6 +62,33 @@ class Application(Gtk.Application):
             None,
         )
 
+        self.add_main_option(
+            "top",
+            ord("T"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Open menu at the top of the screen",
+            None,
+        )
+
+        self.add_main_option(
+            "bottom",
+            ord("B"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Open menu at the bottom of the screen",
+            None,
+        )
+
+        self.add_main_option(
+            "position",
+            ord("p"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(1),
+            "Set menu position (top or bottom)",
+            "POSITION",
+        )
+
     def do_activate(self):
         # We only allow a single window and raise any existing ones
         if not self.window:
@@ -80,7 +108,7 @@ class Application(Gtk.Application):
                 self.window.ui_apps_searchentry.set_text("")
                 self.window.ui_apps_flowbox.unselect_all()
                 self.window.ui_userpins_flowbox.unselect_all()
-                # self.window.control_display()
+                self.window.control_display()
                 self.window.ui_main_window.present()
                 # self.window.focus_search()
                 self.window.unfocus_search()

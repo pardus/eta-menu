@@ -175,12 +175,55 @@ class MainWindow(object):
             GLib.idle_add(self.create_user_pinned_apps_from_file)
             GLib.idle_add(self.set_desktop_apps)
 
+    def get_panel_position(self, monitor=None):
+        if hasattr(self.Application, "args") and isinstance(self.Application.args, dict):
+            if "top" in self.Application.args:
+                return "top"
+            if "bottom" in self.Application.args:
+                return "bottom"
+            if "position" in self.Application.args:
+                pos = str(self.Application.args["position"]).lower()
+                if "top" in pos:
+                    return "top"
+                elif "bottom" in pos:
+                    return "bottom"
+
+        try:
+            cinnamon_settings = Gio.Settings.new("org.cinnamon")
+            panel_defs = cinnamon_settings.get_strv("panels-enabled")
+            for pdef in panel_defs:
+                parts = pdef.split(":")
+                if len(parts) >= 3:
+                    if parts[1] == "0":
+                        if parts[2] == "top":
+                            return "top"
+                        elif parts[2] == "bottom":
+                            return "bottom"
+                    elif parts[2] == "top":
+                        return "top"
+        except Exception:
+            pass
+
+        try:
+            if monitor is None:
+                display = Gdk.Display.get_default()
+                monitor = display.get_primary_monitor() or display.get_monitor(0)
+            geometry = monitor.get_geometry()
+            workarea = monitor.get_workarea()
+            if workarea.y > geometry.y:
+                return "top"
+        except Exception:
+            pass
+
+        return "bottom"
+
     def control_display(self):
         print("in control_display")
         try:
             display = Gdk.Display.get_default()
-            monitor = display.get_primary_monitor()
+            monitor = display.get_primary_monitor() or display.get_monitor(0)
             geometry = monitor.get_geometry()
+            workarea = monitor.get_workarea()
             w = geometry.width
             h = geometry.height
 
@@ -199,7 +242,12 @@ class MainWindow(object):
             else:
                 self.ui_main_window.resize(1, height)
 
-            self.ui_main_window.move(0, h)
+            position = self.get_panel_position(monitor)
+            if position == "top":
+                top_y = workarea.y if workarea.y > geometry.y else 40
+                self.ui_main_window.move(workarea.x, top_y)
+            else:
+                self.ui_main_window.move(0, h)
         except Exception as e:
             print("control_display: {}".format(e))
 
