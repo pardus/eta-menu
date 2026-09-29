@@ -361,7 +361,7 @@ class MainWindow(object):
         if user_real_name == "" or user_real_name == "Unknown":
             user_real_name = username
 
-        self.ui_username_label.set_markup("<b>{}</b>".format(user_real_name))
+        self.ui_username_label.set_markup("<b>{}</b>".format(GLib.markup_escape_text(user_real_name)))
         self.ui_username_label.set_tooltip_text("{}".format(username))
 
     def reset_scroll(self):
