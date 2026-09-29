@@ -19,8 +19,8 @@ def create_mo_files():
         if po.endswith(".po"):
             os.makedirs("{}/{}/LC_MESSAGES".format(podir, po.split(".po")[0]), exist_ok=True)
             mo_file = "{}/{}/LC_MESSAGES/{}".format(podir, po.split(".po")[0], "eta-menu.mo")
-            msgfmt_cmd = 'msgfmt {} -o {}'.format(podir + "/" + po, mo_file)
-            subprocess.call(msgfmt_cmd, shell=True)
+            po_file = "{}/{}".format(podir, po)
+            subprocess.run(["msgfmt", po_file, "-o", mo_file])
             mo.append(("/usr/share/locale/" + po.split(".po")[0] + "/LC_MESSAGES",
                        ["po/" + po.split(".po")[0] + "/LC_MESSAGES/eta-menu.mo"]))
     return mo
@@ -32,8 +32,8 @@ def create_applet_mo_files():
         if po.endswith(".po"):
             os.makedirs("{}/{}/LC_MESSAGES".format(podir, po.split(".po")[0]), exist_ok=True)
             mo_file = "{}/{}/LC_MESSAGES/{}".format(podir, po.split(".po")[0], "menu@etap.org.tr.mo")
-            msgfmt_cmd = 'msgfmt {} -o {}'.format(podir + "/" + po, mo_file)
-            subprocess.call(msgfmt_cmd, shell=True)
+            po_file = "{}/{}".format(podir, po)
+            subprocess.run(["msgfmt", po_file, "-o", mo_file])
             mo.append(("/usr/share/locale/" + po.split(".po")[0] + "/LC_MESSAGES",
                        [podir + "/" + po.split(".po")[0] + "/LC_MESSAGES/menu@etap.org.tr.mo"]))
     return mo
