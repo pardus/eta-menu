@@ -8,6 +8,7 @@ Created on Thu Jul 25 14:53:13 2024
 
 import configparser
 import json
+import os
 import shutil
 from pathlib import Path
 
@@ -108,77 +109,48 @@ class UserSettings(object):
         return False
 
     def add_user_pinned_app(self, app_id):
-        self.create_default_pins()
-        user_pins_file = open(self.user_favorites_file, "r")
-        user_pins = json.load(user_pins_file)
-
-        old_pins = user_pins["apps"]
-        new_pins = old_pins + [app_id]
-        user_pins["apps"] = new_pins
-
-        new_cf = open(self.user_favorites_file, "w")
-        new_cf.write(json.dumps(user_pins, indent=4))
-        new_cf.flush()
+        user_pins = self._read_user_pins()
+        if app_id not in user_pins["apps"]:
+            user_pins["apps"].append(app_id)
+            self._write_user_pins(user_pins)
 
     def remove_user_pinned_app(self, app_id):
-        self.create_default_pins()
-        user_pins_file = open(self.user_favorites_file, "r")
-        user_pins = json.load(user_pins_file)
-
+        user_pins = self._read_user_pins()
         if app_id in user_pins["apps"]:
             user_pins["apps"].remove(app_id)
-
-        new_cf = open(self.user_favorites_file, "w")
-        new_cf.write(json.dumps(user_pins, indent=4))
-        new_cf.flush()
+            self._write_user_pins(user_pins)
 
     def move_up_user_pinned_app(self, item):
-        self.create_default_pins()
-        user_pins_file = open(self.user_favorites_file, "r")
-        user_pins = json.load(user_pins_file)
-
+        user_pins = self._read_user_pins()
+        if item not in user_pins["apps"]:
+            return
         index = user_pins["apps"].index(item)
         if index > 0:
             user_pins["apps"][index], user_pins["apps"][index - 1] = user_pins["apps"][index - 1], user_pins["apps"][
                 index]
-
-            new_cf = open(self.user_favorites_file, "w")
-            new_cf.write(json.dumps(user_pins, indent=4))
-            new_cf.flush()
+            self._write_user_pins(user_pins)
 
     def move_down_user_pinned_app(self, item):
-        self.create_default_pins()
-        user_pins_file = open(self.user_favorites_file, "r")
-        user_pins = json.load(user_pins_file)
-
+        user_pins = self._read_user_pins()
+        if item not in user_pins["apps"]:
+            return
         index = user_pins["apps"].index(item)
         if index < len(user_pins["apps"]) - 1:
             user_pins["apps"][index], user_pins["apps"][index + 1] = user_pins["apps"][index + 1], user_pins["apps"][
                 index]
-
-            new_cf = open(self.user_favorites_file, "w")
-            new_cf.write(json.dumps(user_pins, indent=4))
-            new_cf.flush()
+            self._write_user_pins(user_pins)
 
     def get_user_pins(self):
-        user_pins = []
-        if Path.is_file(self.user_favorites_file):
-            user_pins_file = open(self.user_favorites_file, "r")
-            user_pins = json.load(user_pins_file)
-        elif Path.is_file(self.system_favorites_file):
-            system_pins_file = open(self.system_favorites_file, "r")
-            user_pins = json.load(system_pins_file)
-        else:
-            self.create_default_pins()
-            if Path.is_file(self.user_favorites_file):
-                user_pins_file = open(self.user_favorites_file, "r")
-                user_pins = json.load(user_pins_file)
-        return user_pins
+        return self._read_user_pins()
 
     def create_default_pins(self):
         if not Path.is_file(self.user_favorites_file):
             if Path.is_file(self.system_favorites_file):
-                shutil.copy2(self.system_favorites_file, self.user_favorites_file)
+                try:
+                    with open(self.system_favorites_file, "r", encoding="utf-8") as pins_file:
+                        self._write_user_pins(json.load(pins_file))
+                except (OSError, json.JSONDecodeError, TypeError, KeyError):
+                    self._write_user_pins({"apps": []})
             else:
                 default_pins = {
                     "apps": [
@@ -191,9 +163,44 @@ class UserSettings(object):
                         "blueman-manager.desktop"
                     ]
                 }
-                new_cf = open(self.user_favorites_file, "w")
-                new_cf.write(json.dumps(default_pins, indent=4))
-                new_cf.flush()
+                self._write_user_pins(default_pins)
+
+    def _read_user_pins(self):
+        self.create_default_pins()
+        source = self.user_favorites_file
+
+        try:
+            with open(source, "r", encoding="utf-8") as pins_file:
+                return self._normalize_pins(json.load(pins_file))
+        except (OSError, json.JSONDecodeError, TypeError, KeyError):
+            print("{} is invalid. Resetting favorites.".format(source))
+            pins = {"apps": []}
+            self._write_user_pins(pins)
+            return pins
+
+    @staticmethod
+    def _normalize_pins(pins):
+        if not isinstance(pins, dict) or not isinstance(pins.get("apps"), list):
+            raise TypeError("favorites must contain an apps list")
+
+        apps = []
+        for app_id in pins["apps"]:
+            if isinstance(app_id, str) and app_id and app_id not in apps:
+                apps.append(app_id)
+        return {"apps": apps}
+
+    def _write_user_pins(self, pins):
+        pins = self._normalize_pins(pins)
+        self.create_dir(self.user_config_dir)
+        temporary_file = self.user_favorites_file.with_suffix(".json.tmp")
+        try:
+            with open(temporary_file, "w", encoding="utf-8") as pins_file:
+                json.dump(pins, pins_file, indent=4)
+                pins_file.write("\n")
+            os.replace(temporary_file, self.user_favorites_file)
+        finally:
+            if temporary_file.exists():
+                temporary_file.unlink()
 
     def create_dir(self, dir_path):
         try:
@@ -204,4 +211,5 @@ class UserSettings(object):
             return False
 
     def remove_user_config_dir(self):
-        shutil.rmtree(self.user_config_dir)
+        if self.user_config_dir.exists():
+            shutil.rmtree(self.user_config_dir)
