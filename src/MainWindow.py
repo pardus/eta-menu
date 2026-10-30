@@ -128,6 +128,7 @@ class MainWindow(object):
         self.monitoring_id = None
         self.right_clicked_app = None
         self.info_revealer_id = None
+        self.search_fold = str.maketrans({"ç": "c", "ğ": "g", "ı": "i", "ö": "o", "ş": "s", "ü": "u", "\u0307": None})
 
     def user_settings(self):
         self.UserSettings = UserSettings()
@@ -361,7 +362,7 @@ class MainWindow(object):
         if user_real_name == "" or user_real_name == "Unknown":
             user_real_name = username
 
-        self.ui_username_label.set_markup("<b>{}</b>".format(user_real_name))
+        self.ui_username_label.set_markup("<b>{}</b>".format(GLib.markup_escape_text(user_real_name, -1)))
         self.ui_username_label.set_tooltip_text("{}".format(username))
 
     def reset_scroll(self):
@@ -457,7 +458,7 @@ class MainWindow(object):
         listbox.get_style_context().add_class("eta-menu-listbox")
         GLib.idle_add(listbox.add, box)
 
-        GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+        GLib.idle_add(self.ui_userpins_flowbox.insert, listbox, -1)
         GLib.idle_add(self.ui_userpins_flowbox.show_all)
 
     def get_desktop_apps(self):
@@ -526,7 +527,7 @@ class MainWindow(object):
             listbox.get_style_context().add_class("eta-menu-listbox")
             GLib.idle_add(listbox.add, box)
 
-            GLib.idle_add(self.ui_apps_flowbox.insert, listbox, GLib.PRIORITY_DEFAULT_IDLE)
+            GLib.idle_add(self.ui_apps_flowbox.insert, listbox, -1)
 
         GLib.idle_add(self.ui_apps_flowbox.show_all)
 
@@ -557,12 +558,17 @@ class MainWindow(object):
     def set_autostart(self):
         self.UserSettings.set_autostart(self.UserSettings.config_autostart)
 
+    def search_key(self, text):
+        # lower() turns İ into i + combining dot and I into i, so Turkish
+        # names in capitals never matched what people type
+        return text.strip().casefold().translate(self.search_fold)
+
     def apps_filter_function(self, row):
-        search = self.ui_apps_searchentry.get_text().lower()
+        search = self.search_key(self.ui_apps_searchentry.get_text())
         app = row.get_children()[0].name
-        if (search in app["name"].lower() or search in app["description"].lower()
-                or search in app["executable"].lower() or search in app["categories"].lower()
-                or search in app["keywords"].lower()):
+        if (search in self.search_key(app["name"]) or search in self.search_key(app["description"])
+                or search in self.search_key(app["executable"]) or search in self.search_key(app["categories"])
+                or search in self.search_key(app["keywords"])):
             return True
 
     def close_info_revealer(self):
